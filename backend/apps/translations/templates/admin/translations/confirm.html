@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<div class="flex flex-col gap-6 max-w-3xl">
+    <p>Translate saved English content into Spanish, French, German, Simplified Chinese and Arabic using Groq. Save any edits before continuing.</p>
+    <p>Only empty translation fields are filled. Existing translations and English text are preserved. Each selected record is translated separately; select its related features, images or FAQs from their own lists.</p>
+    <p>Generated content is marked <strong>Machine translated</strong>. Published records receiving new text return to <strong>Draft</strong> until a human reviews and publishes them again.</p>
+    <ul>{% for obj in objects %}<li>{{ obj }}</li>{% endfor %}</ul>
+    <p>Failures are recorded in System → Translation log. Rerun the action to retry missing fields. Larger requests may take a few minutes.</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="auto_translate">
+        <input type="hidden" name="confirm_translation" value="yes">
+        {% for obj in objects %}<input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk }}">{% endfor %}
+        <button type="submit" class="bg-primary-600 text-white px-4 py-2 rounded-default">Translate saved content</button>
+        <a href="../" class="ms-4">Cancel</a>
+    </form>
+</div>
+{% endblock %}

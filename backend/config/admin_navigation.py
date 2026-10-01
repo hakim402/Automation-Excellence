@@ -44,6 +44,11 @@ SYSTEM_GROUP = {
     "separator": True,
     "collapsible": True,
     "items": [
+        {
+            "title": "Translation log",
+            "icon": "translate",
+            "link": "/admin/translations/translationlog/",
+        },
         {"title": "Users", "icon": "person", "link": "/admin/auth/user/"},
         {"title": "Groups", "icon": "group", "link": "/admin/auth/group/"},
     ],

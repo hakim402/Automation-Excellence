@@ -13,6 +13,8 @@ from modeltranslation.utils import build_localized_fieldname
 from unfold.contrib.forms.widgets import WysiwygWidget
 from unfold.decorators import display
 
+from apps.translations.admin_actions import TranslationActionsMixin
+
 from .models import PublishStatus, TranslationStatus
 
 # Unfold's own semantic label colours. These are admin chrome, not the public
@@ -80,7 +82,7 @@ class RestrictedWysiwygWidget(WysiwygWidget):
     template_name = "admin/core/wysiwyg.html"
 
 
-class LanguageTabsMixin:
+class LanguageTabsMixin(TranslationActionsMixin):
     """
     Renders one Unfold tab per locale, English first.
 

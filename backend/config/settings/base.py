@@ -78,6 +78,7 @@ LOCAL_APPS = [
     "apps.cyber_security",
     "apps.blog",
     "apps.crm",
+    "apps.translations",
 ]
 
 INSTALLED_APPS = UNFOLD_APPS + TRANSLATION_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -270,7 +271,14 @@ EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=10)
 # --------------------------------------------------------------------------
 
 GROQ_API_KEY = env("GROQ_API_KEY", default="")
-GROQ_MODEL = env("GROQ_MODEL", default="llama-3.3-70b-versatile")
+GROQ_MODEL = env("GROQ_MODEL", default="qwen/qwen3.8-27b")
+GROQ_API_URL = env("GROQ_API_URL", default="https://api.groq.com/openai/v1/chat/completions")
+GROQ_TIMEOUT = env.float("GROQ_TIMEOUT", default=20)
+GROQ_MAX_ATTEMPTS = env.int("GROQ_MAX_ATTEMPTS", default=3)
+GROQ_RETRY_MAX_SECONDS = env.float("GROQ_RETRY_MAX_SECONDS", default=15)
+GROQ_BATCH_CHARS = env.int("GROQ_BATCH_CHARS", default=6000)
+GROQ_MAX_COMPLETION_TOKENS = env.int("GROQ_MAX_COMPLETION_TOKENS", default=4096)
+TRANSLATION_ADMIN_MAX_RECORDS = env.int("TRANSLATION_ADMIN_MAX_RECORDS", default=3)
 
 TURNSTILE_SECRET_KEY = env("TURNSTILE_SECRET_KEY", default="")
 TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
