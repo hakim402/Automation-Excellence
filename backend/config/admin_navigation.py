@@ -6,8 +6,7 @@ deliberately does not duplicate a model per service (BUILD_PROMPT.md design
 note) -- the per-service reading of the admin comes from how this navigation
 is grouped, not from six copies of the same table.
 
-Phase 1 groups each service's existing shared content. Phase 2 will add
-its distinct models and case-study proxies to these same groups.
+Service groups combine shared content with dedicated models and case-study proxies.
 
 Links are written as literal admin paths rather than reverse_lazy, because
 reverse_lazy on a model that does not exist yet fails at render time rather
@@ -85,4 +84,99 @@ SERVICE_GROUPS = [
     )
 ]
 
-NAVIGATION = [SITE_GROUP, SERVICES_GROUP, *SERVICE_GROUPS, SYSTEM_GROUP]
+
+def group(title, items):
+    return {
+        "title": title,
+        "separator": True,
+        "collapsible": True,
+        "items": [
+            {"title": label, "icon": icon, "link": f"/admin/{path}/"} for path, label, icon in items
+        ],
+    }
+
+
+PRODUCTS_GROUP = group(
+    "Products",
+    [
+        ("products/product", "All products", "inventory_2"),
+        ("products/productfeature", "Features", "list_alt"),
+        ("products/productimage", "Gallery", "photo_library"),
+    ],
+)
+MEDIA_GROUP = group("Media", [("core/video", "Videos", "videocam")])
+CONTENT_GROUP = group(
+    "Content",
+    [
+        ("blog/post", "Blog posts", "article"),
+        ("blog/category", "Categories", "category"),
+        ("blog/tag", "Tags", "label"),
+        ("portfolio/casestudy", "All case studies", "work"),
+    ],
+)
+LEADS_GROUP = group(
+    "Leads",
+    [
+        ("crm/lead", "Leads", "contact_mail"),
+        ("crm/newslettersubscriber", "Newsletter", "mail"),
+    ],
+)
+SERVICE_MODELS = [
+    (
+        "digital_marketing",
+        "digitalmarketingcasestudy",
+        [
+            ("campaign", "Campaigns"),
+            ("creativework", "Creative work"),
+            ("socialchannel", "Social channels"),
+        ],
+    ),
+    (
+        "ai_automation",
+        "aiautomationcasestudy",
+        [
+            ("automationusecase", "Use cases"),
+            ("agenttype", "Agent types"),
+            ("integration", "Integrations"),
+        ],
+    ),
+    (
+        "custom_software",
+        "customsoftwarecasestudy",
+        [("systemtype", "System types"), ("databasecapability", "Database capabilities")],
+    ),
+    ("web_development", "webdevelopmentcasestudy", [("webcapability", "Capabilities")]),
+    ("mobile_development", "mobiledevelopmentcasestudy", [("mobileapp", "Apps")]),
+    (
+        "cyber_security",
+        "cybersecuritycasestudy",
+        [
+            ("securityservice", "Security services"),
+            ("compliancestandard", "Compliance"),
+            ("certification", "Certifications"),
+        ],
+    ),
+]
+for service_group, (app, proxy, models) in zip(SERVICE_GROUPS, SERVICE_MODELS, strict=True):
+    service_group["items"].extend(
+        group(
+            "",
+            [(f"{app}/{model}", label, "view_list") for model, label in models]
+            + [(f"{app}/{proxy}", "Case studies", "work")],
+        )["items"]
+    )
+
+NAVIGATION = [
+    {
+        "title": "Dashboard",
+        "items": [{"title": "Overview", "icon": "dashboard", "link": "/admin/"}],
+    },
+    SITE_GROUP,
+    SERVICES_GROUP,
+    PRODUCTS_GROUP,
+    MEDIA_GROUP,
+    *SERVICE_GROUPS,
+    CONTENT_GROUP,
+    LEADS_GROUP,
+    SYSTEM_GROUP,
+]

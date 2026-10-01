@@ -6,14 +6,23 @@ file, so publishing, timestamps, SEO and translation state behave identically
 across every app.
 """
 
+from urllib.parse import urlparse
+
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
 from modeltranslation.utils import build_localized_fieldname
 
 from .sanitize import clean_html
-from .uploads import UploadTo, validate_upload_size
+from .uploads import (
+    ALLOWED_VIDEO_EXTENSIONS,
+    UploadTo,
+    validate_image_file,
+    validate_upload_size,
+    validate_video_file,
+)
 
 # ---------------------------------------------------------------------------
 # Choices
@@ -178,7 +187,7 @@ class SEOFields(models.Model):
     )
     og_image = models.ImageField(
         upload_to=UploadTo("og"),
-        validators=[validate_upload_size],
+        validators=[validate_upload_size, validate_image_file],
         blank=True,
         help_text="Social sharing image. 1200x630 works everywhere.",
     )
@@ -221,16 +230,20 @@ class SiteSettings(TimeStamped, TranslationTracked):
     about_short = models.TextField(blank=True, help_text="Two or three sentences. Plain text.")
 
     logo = models.ImageField(
-        upload_to=UploadTo("brand"), validators=[validate_upload_size], blank=True
+        upload_to=UploadTo("brand"),
+        validators=[validate_upload_size, validate_image_file],
+        blank=True,
     )
     logo_dark = models.ImageField(
         upload_to=UploadTo("brand"),
-        validators=[validate_upload_size],
+        validators=[validate_upload_size, validate_image_file],
         blank=True,
         help_text="For light backgrounds. The site is dark-first, so this is the exception.",
     )
     favicon = models.ImageField(
-        upload_to=UploadTo("brand"), validators=[validate_upload_size], blank=True
+        upload_to=UploadTo("brand"),
+        validators=[validate_upload_size, validate_image_file],
+        blank=True,
     )
 
     address_line_1 = models.CharField(max_length=160, blank=True)
@@ -285,7 +298,7 @@ class SiteSettings(TimeStamped, TranslationTracked):
     default_meta_title = models.CharField(max_length=70, blank=True)
     default_meta_description = models.CharField(max_length=170, blank=True)
     default_og_image = models.ImageField(
-        upload_to=UploadTo("og"), validators=[validate_upload_size], blank=True
+        upload_to=UploadTo("og"), validators=[validate_upload_size, validate_image_file], blank=True
     )
 
     class Meta:
@@ -330,7 +343,9 @@ class Tool(TimeStamped, Ordered):
     name = models.CharField(max_length=80, unique=True)
     slug = models.SlugField(max_length=90, unique=True, validators=[validate_slug_is_english])
     logo = models.ImageField(
-        upload_to=UploadTo("tools"), validators=[validate_upload_size], blank=True
+        upload_to=UploadTo("tools"),
+        validators=[validate_upload_size, validate_image_file],
+        blank=True,
     )
     category = models.CharField(max_length=20, choices=ToolCategory.choices, db_index=True)
     url = models.URLField(blank=True)
@@ -362,7 +377,9 @@ class Testimonial(Publishable, Ordered):
     client_role = models.CharField(max_length=120, blank=True)
     client_company = models.CharField(max_length=120, blank=True)
     company_logo = models.ImageField(
-        upload_to=UploadTo("testimonials"), validators=[validate_upload_size], blank=True
+        upload_to=UploadTo("testimonials"),
+        validators=[validate_upload_size, validate_image_file],
+        blank=True,
     )
     quote = models.TextField(help_text="The client's words. Plain text.")
     rating = models.PositiveSmallIntegerField(
@@ -395,7 +412,9 @@ class TeamMember(TimeStamped, TranslationTracked, Ordered):
     role = models.CharField(max_length=120, blank=True)
     bio = models.TextField(blank=True, help_text="Plain text.")
     photo = models.ImageField(
-        upload_to=UploadTo("team"), validators=[validate_upload_size], blank=True
+        upload_to=UploadTo("team"),
+        validators=[validate_upload_size, validate_image_file],
+        blank=True,
     )
     linkedin = models.URLField(blank=True)
     github = models.URLField(blank=True)
@@ -470,3 +489,93 @@ class RichTextSanitised(models.Model):
                 setattr(self, field, clean_html(getattr(self, field), profile=profile))
 
         super().save(*args, **kwargs)
+
+
+class Video(Publishable, Ordered):
+    """Shared media, optionally owned by one service, product or case study."""
+
+    title = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=180, unique=True, validators=[validate_slug_is_english])
+    description = models.TextField(blank=True)
+    orientation = models.CharField(
+        max_length=12, choices=[("landscape", "Landscape (16:9)"), ("portrait", "Portrait (9:16)")]
+    )
+    source = models.CharField(
+        max_length=10,
+        choices=[("youtube", "YouTube"), ("vimeo", "Vimeo"), ("file", "Uploaded file")],
+        default="youtube",
+    )
+    external_url = models.URLField(blank=True)
+    video_file = models.FileField(
+        upload_to=UploadTo("videos", ALLOWED_VIDEO_EXTENSIONS),
+        validators=[validate_upload_size, validate_video_file],
+        blank=True,
+    )
+    poster_image = models.ImageField(
+        upload_to=UploadTo("videos/posters"),
+        validators=[validate_upload_size, validate_image_file],
+        blank=True,
+    )
+    duration_seconds = models.PositiveIntegerField(null=True, blank=True)
+    captions_url = models.URLField(blank=True, help_text="URL of a captions track, when available.")
+    service = models.ForeignKey(
+        "services.Service", on_delete=models.PROTECT, null=True, blank=True, related_name="videos"
+    )
+    product = models.ForeignKey(
+        "products.Product", on_delete=models.PROTECT, null=True, blank=True, related_name="videos"
+    )
+    case_study = models.ForeignKey(
+        "portfolio.CaseStudy",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="videos",
+    )
+    is_featured = models.BooleanField(default=False, db_index=True)
+
+    class Meta(Ordered.Meta):
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(service__isnull=True, product__isnull=True)
+                    | models.Q(service__isnull=True, case_study__isnull=True)
+                    | models.Q(product__isnull=True, case_study__isnull=True)
+                ),
+                name="video_at_most_one_owner",
+            ),
+            models.CheckConstraint(
+                condition=(models.Q(source="file", external_url="") & ~models.Q(video_file=""))
+                | (
+                    models.Q(source__in=["youtube", "vimeo"], video_file="")
+                    & ~models.Q(external_url="")
+                ),
+                name="video_source_matches_media",
+            ),
+        ]
+
+    def __str__(self):
+        return self.title
+
+    def clean(self):
+        super().clean()
+        if sum(bool(owner) for owner in (self.service_id, self.product_id, self.case_study_id)) > 1:
+            raise ValidationError("Attach a video to at most one service, product or case study.")
+        if self.source == "file":
+            if not self.video_file or self.external_url:
+                raise ValidationError(
+                    "For uploaded video, provide a file and leave the external URL empty."
+                )
+        else:
+            if self.video_file or not self.external_url:
+                raise ValidationError(
+                    "For hosted video, provide an external URL and leave the file empty."
+                )
+            parsed = urlparse(self.external_url)
+            hosts = {
+                "youtube": {"youtube.com", "www.youtube.com", "youtu.be", "m.youtube.com"},
+                "vimeo": {"vimeo.com", "www.vimeo.com", "player.vimeo.com"},
+            }
+            if parsed.scheme != "https" or parsed.hostname not in hosts.get(self.source, set()):
+                raise ValidationError(
+                    {"external_url": "Use an HTTPS URL from the selected video host."}
+                )

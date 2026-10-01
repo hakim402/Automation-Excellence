@@ -20,7 +20,7 @@ from apps.core.models import (
     validate_icon_name,
     validate_slug_is_english,
 )
-from apps.core.uploads import UploadTo, validate_upload_size
+from apps.core.uploads import UploadTo, validate_image_file, validate_upload_size
 
 
 class ServiceKey(models.TextChoices):
@@ -78,7 +78,9 @@ class Service(RichTextSanitised, Publishable, SEOFields, Ordered):
     hero_headline = models.CharField(max_length=120, blank=True)
     hero_subline = models.CharField(max_length=240, blank=True)
     hero_image = models.ImageField(
-        upload_to=UploadTo("services"), validators=[validate_upload_size], blank=True
+        upload_to=UploadTo("services"),
+        validators=[validate_upload_size, validate_image_file],
+        blank=True,
     )
 
     intro = models.TextField(

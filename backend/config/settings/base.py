@@ -68,6 +68,16 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.core",
     "apps.services",
+    "apps.products",
+    "apps.portfolio",
+    "apps.digital_marketing",
+    "apps.ai_automation",
+    "apps.custom_software",
+    "apps.web_development",
+    "apps.mobile_development",
+    "apps.cyber_security",
+    "apps.blog",
+    "apps.crm",
 ]
 
 INSTALLED_APPS = UNFOLD_APPS + TRANSLATION_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -250,6 +260,8 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Automex <info@automex.tech>")
 LEAD_ALERT_RECIPIENTS = env.list("LEAD_ALERT_RECIPIENTS", default=[])
+ADMIN_BASE_URL = env("ADMIN_BASE_URL", default=SITE_DOMAIN)
+EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=10)
 
 
 # --------------------------------------------------------------------------
@@ -299,6 +311,7 @@ LOGGING = {
 
 UNFOLD = {
     "SITE_TITLE": "Automex Admin",
+    "DASHBOARD_CALLBACK": "config.dashboard.dashboard_callback",
     "SITE_HEADER": "Automex",
     "SITE_SUBHEADER": "Content and leads",
     "SITE_URL": FRONTEND_ORIGIN,

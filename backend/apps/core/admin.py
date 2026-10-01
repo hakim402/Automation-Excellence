@@ -19,7 +19,8 @@ from .admin_mixins import (
     image_preview,
     render_image,
 )
-from .models import Industry, SiteSettings, Stat, TeamMember, Testimonial, Tool
+from .content_admin import ContentAdmin
+from .models import Industry, SiteSettings, Stat, TeamMember, Testimonial, Tool, Video
 
 
 @admin.register(SiteSettings)
@@ -265,3 +266,20 @@ class StatAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
             },
         ),
     )
+
+
+@admin.register(Video)
+class VideoAdmin(ContentAdmin):
+    list_display = (
+        "title",
+        "orientation",
+        "source",
+        "publish_badge",
+        "translation_badge",
+        "is_featured",
+        "order",
+    )
+    list_filter = ("orientation", "source", "status", "translation_status", "is_featured")
+    search_fields = ("title_en", "slug")
+    prepopulated_fields = {"slug": ("title_en",)}
+    autocomplete_fields = ("service", "product", "case_study")

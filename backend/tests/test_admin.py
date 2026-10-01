@@ -198,14 +198,19 @@ class SidebarNavigationTests(TestCase):
         self.assertEqual(
             [group["title"] for group in NAVIGATION],
             [
+                "Dashboard",
                 "Site",
                 "Services",
+                "Products",
+                "Media",
                 "Digital Marketing",
                 "AI & Automation",
                 "Custom Software",
                 "Web Development",
                 "Mobile Development",
                 "Cyber Security",
+                "Content",
+                "Leads",
                 "System",
             ],
         )

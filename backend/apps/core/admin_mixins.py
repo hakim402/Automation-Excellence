@@ -35,7 +35,7 @@ def translated_fields_for(model) -> tuple[str, ...]:
     the model rather than the arbitrary order modeltranslation stores them in.
     """
     try:
-        options = translator.get_options_for_model(model)
+        options = translator.get_options_for_model(model._meta.concrete_model)
     except NotRegistered:
         return ()
 

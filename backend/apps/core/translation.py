@@ -10,7 +10,7 @@ Adding a field here creates six database columns, so it needs a migration.
 
 from modeltranslation.translator import TranslationOptions, register
 
-from .models import Industry, SiteSettings, Stat, TeamMember, Testimonial
+from .models import Industry, SiteSettings, Stat, TeamMember, Testimonial, Video
 
 
 @register(SiteSettings)
@@ -48,3 +48,9 @@ class StatTranslationOptions(TranslationOptions):
 
 
 # Tool is deliberately absent: a tool's name is a product name.
+
+
+@register(Video)
+class VideoTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
+    fields = ("title", "description")

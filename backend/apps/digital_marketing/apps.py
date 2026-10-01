@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class DigitalMarketingConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.digital_marketing"
+    verbose_name = "Digital Marketing"

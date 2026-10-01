@@ -12,6 +12,7 @@ from pathlib import Path
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
+from PIL import Image, UnidentifiedImageError
 
 # Extensions we are willing to store. SVG is excluded on purpose: it is an
 # XML document that can carry script, and it would be served from our own
@@ -19,6 +20,61 @@ from django.utils.deconstruct import deconstructible
 ALLOWED_IMAGE_EXTENSIONS = frozenset({".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"})
 ALLOWED_DOCUMENT_EXTENSIONS = frozenset({".pdf"})
 ALLOWED_VIDEO_EXTENSIONS = frozenset({".mp4", ".webm"})
+
+
+def validate_media_file(value):
+    """Check the actual container/image format, never the browser MIME claim."""
+    extension = Path(value.name).suffix.lower()
+    if extension not in ALLOWED_IMAGE_EXTENSIONS | ALLOWED_VIDEO_EXTENSIONS:
+        raise ValidationError("Upload a supported image, MP4 or WebM file.")
+    value.open("rb")
+    position = value.tell()
+    try:
+        header = value.read(64)
+        value.seek(0)
+        if extension in ALLOWED_IMAGE_EXTENSIONS:
+            try:
+                image = Image.open(value)
+                expected = {
+                    ".jpg": "JPEG",
+                    ".jpeg": "JPEG",
+                    ".png": "PNG",
+                    ".gif": "GIF",
+                    ".webp": "WEBP",
+                    ".avif": "AVIF",
+                }
+                if image.format != expected[extension]:
+                    raise ValidationError("Image contents do not match its extension.")
+                image.verify()
+            except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as exc:
+                raise ValidationError("The uploaded image is invalid.") from exc
+        elif extension == ".mp4":
+            if header[4:8] != b"ftyp" or header[8:12] not in (
+                b"isom",
+                b"iso2",
+                b"mp41",
+                b"mp42",
+                b"avc1",
+                b"M4V ",
+                b"dash",
+            ):
+                raise ValidationError("The uploaded file is not a supported MP4 container.")
+        elif not (header.startswith(b"\x1a\x45\xdf\xa3") and b"webm" in header):
+            raise ValidationError("The uploaded file is not a WebM container.")
+    finally:
+        value.seek(position)
+
+
+def validate_image_file(value):
+    if Path(value.name).suffix.lower() not in ALLOWED_IMAGE_EXTENSIONS:
+        raise ValidationError("Upload a JPEG, PNG, WebP, AVIF or GIF image.")
+    validate_media_file(value)
+
+
+def validate_video_file(value):
+    if Path(value.name).suffix.lower() not in ALLOWED_VIDEO_EXTENSIONS:
+        raise ValidationError("Upload an MP4 or WebM video.")
+    validate_media_file(value)
 
 
 def validate_upload_size(value) -> None:

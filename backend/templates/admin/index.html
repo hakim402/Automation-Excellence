@@ -1,0 +1,48 @@
+{% extends 'admin/base.html' %}
+{% load i18n %}
+{% block branding %}{% include "unfold/helpers/site_branding.html" %}{% endblock %}
+{% block content %}
+<div class="flex flex-col gap-6">
+    <div>
+        <h2 class="text-xl font-semibold text-font-important-light dark:text-font-important-dark">Content and leads</h2>
+        <p class="mt-2 text-sm">Counts include only records you have permission to view.</p>
+    </div>
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {% if can_view_leads %}
+        <section class="border border-base-200 dark:border-base-800 rounded-default p-6">
+            <h3 class="font-semibold">New leads this week</h3>
+            <p class="text-3xl font-semibold my-4">{{ new_leads_this_week }}</p>
+            <p class="text-sm mb-4">Status “new”, received since Monday {{ lead_week_start|date:"j M Y" }}.</p>
+            <a class="text-primary-600 dark:text-primary-500" href="{{ leads_url }}">Review leads</a>
+        </section>
+        <section class="border border-base-200 dark:border-base-800 rounded-default p-6">
+            <h3 class="font-semibold mb-4">Leads by service this week</h3>
+            <ul class="flex flex-col gap-3">
+            {% for row in leads_by_service %}
+                <li class="flex justify-between gap-4"><span>{{ row.service__name_en|default:"General enquiry" }}</span><strong>{{ row.count }}</strong></li>
+            {% empty %}<li>No leads received this week.</li>{% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+        <section class="border border-base-200 dark:border-base-800 rounded-default p-6">
+            <h3 class="font-semibold">Unpublished drafts</h3>
+            <p class="text-3xl font-semibold my-4">{{ draft_total }}</p>
+            <ul class="flex flex-col gap-3">
+            {% for row in draft_rows %}
+                <li><a class="flex justify-between gap-4 text-primary-600 dark:text-primary-500" href="{{ row.url }}"><span>{{ row.label|capfirst }}</span><strong>{{ row.count }}</strong></a></li>
+            {% empty %}<li>No drafts awaiting publication.</li>{% endfor %}
+            </ul>
+        </section>
+        <section class="border border-base-200 dark:border-base-800 rounded-default p-6">
+            <h3 class="font-semibold">Awaiting translation review</h3>
+            <p class="text-3xl font-semibold my-4">{{ review_total }}</p>
+            <ul class="flex flex-col gap-3">
+            {% for row in review_rows %}
+                <li><a class="flex justify-between gap-4 text-primary-600 dark:text-primary-500" href="{{ row.url }}"><span>{{ row.label|capfirst }}</span><strong>{{ row.count }}</strong></a></li>
+            {% empty %}<li>No machine translations awaiting review.</li>{% endfor %}
+            </ul>
+        </section>
+    </div>
+    {% include "unfold/helpers/dashboard_default.html" %}
+</div>
+{% endblock %}
