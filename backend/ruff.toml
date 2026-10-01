@@ -1,0 +1,9 @@
+target-version = "py312"
+line-length = 100
+extend-exclude = ["**/migrations/*"]
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "DJ", "C4", "SIM"]
+
+[lint.isort]
+known-first-party = ["apps", "config"]

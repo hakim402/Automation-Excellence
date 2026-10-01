@@ -1,0 +1,58 @@
+# Automex — reference compose file.
+#
+# NOT part of the current workflow. Deployment is a single VPS running the
+# backend under gunicorn and the frontend under `next start`, both behind a
+# reverse proxy (BUILD_PROMPT.md: "no Docker for now"). This file exists so
+# the container path stays a known quantity.
+#
+# Every value comes from the environment. No secret is written here.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-automex}
+      POSTGRES_USER: ${POSTGRES_USER:-automex}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-automex}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: ./backend/.env
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+      DATABASE_URL: postgres://${POSTGRES_USER:-automex}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-automex}
+    volumes:
+      - media:/app/media
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        API_URL: http://backend:8000/api/v1
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?set NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?set NEXT_PUBLIC_SITE_URL}
+        NEXT_PUBLIC_MEDIA_URL: ${NEXT_PUBLIC_MEDIA_URL:?set NEXT_PUBLIC_MEDIA_URL}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file: ./frontend/.env.local
+    ports:
+      - "127.0.0.1:3000:3000"
+
+volumes:
+  db_data:
+  media:

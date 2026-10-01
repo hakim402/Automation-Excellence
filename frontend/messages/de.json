@@ -1,0 +1,24 @@
+{
+  "common": {
+    "brand": "Automex",
+    "tagline": "Systeme, die von selbst laufen",
+    "requestQuote": "Angebot anfordern",
+    "language": "Sprache",
+    "skipToContent": "Zum Inhalt springen"
+  },
+  "scaffold": {
+    "status": "Grundgerüst",
+    "heading": "Der Aufbau steht",
+    "intro": "Phase 0 ist fertig: die API, die sechs Sprachen, die Design-Tokens und das Admin-Theme. Die Seiteninhalte folgen in den nächsten Phasen.",
+    "checks": {
+      "locales": "Sechs Sprachen geroutet",
+      "direction": "Textrichtung",
+      "tokens": "Design-Tokens geladen",
+      "fonts": "Schriften für diese Sprache",
+      "api": "Inhalts-API"
+    },
+    "directionLtr": "Von links nach rechts",
+    "directionRtl": "Von rechts nach links",
+    "apiPending": "Wird in Phase 4 verbunden"
+  }
+}

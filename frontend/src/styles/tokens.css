@@ -1,0 +1,108 @@
+/*
+ * Automex design tokens — the single source of truth for colour, type and
+ * spacing (CLAUDE.md section 8). A hard-coded hex in a component is a bug.
+ *
+ * Palette is "Deep Harbor". The seven brand colours below are fixed; no
+ * colour outside them may be introduced. The --ax-* entries further down are
+ * *derivations* (alpha and mixes of brand colours), not additions — they exist
+ * so components never need to invent a border or hover value.
+ */
+
+:root {
+  /* ---------------------------------------------------------------- brand */
+  --ax-petrol: #0a2830; /* anchor. dark backgrounds, logo lockup      */
+  --ax-harbor: #0e4553; /* raised surfaces, cards, panels, borders    */
+  --ax-amber: #ffb627;  /* signature accent. CTAs, key metrics. RARE  */
+  --ax-cyan: #3fc9ce;   /* secondary accent. links, data, diagrams    */
+  --ax-mist: #f2f6f6;   /* light background — print, decks, light     */
+  --ax-slate: #8fa9ae;  /* secondary text, captions, muted UI         */
+  --ax-paper: #eaf2f2;  /* primary text on dark                       */
+
+  /* ------------------------------------------------------------- semantic */
+  --ax-success: #3dbe8b;
+  --ax-warning: #ffb627; /* reuses amber by design */
+  --ax-error: #e5484d;
+  --ax-info: #3fc9ce;
+
+  /* --------------------------------------------- surfaces (dark-first)
+   * Derived from petrol + harbor only. `elevated` sits between the two so a
+   * panel can lift off the page without a shadow.                        */
+  --ax-bg: var(--ax-petrol);
+  --ax-surface: color-mix(in oklab, var(--ax-harbor) 55%, var(--ax-petrol));
+  --ax-elevated: var(--ax-harbor);
+  --ax-border: color-mix(in oklab, var(--ax-slate) 20%, transparent);
+  --ax-border-strong: color-mix(in oklab, var(--ax-slate) 38%, transparent);
+  --ax-hover: color-mix(in oklab, var(--ax-harbor) 75%, var(--ax-petrol));
+
+  /* --------------------------------------------------------------- text */
+  --ax-text: var(--ax-paper);
+  --ax-text-muted: var(--ax-slate);
+  --ax-text-on-amber: var(--ax-petrol); /* amber is a fill, never a text colour */
+
+  /* --------------------------------------------------------------- type
+   * Families are wired to next/font CSS variables in src/styles/fonts.ts.
+   * --ax-font-locale is swapped per locale so Arabic and Chinese never fall
+   * through to a Latin face (CLAUDE.md section 7).                        */
+  --ax-font-display: var(--font-archivo), var(--ax-font-locale), system-ui, sans-serif;
+  --ax-font-body: var(--font-inter), var(--ax-font-locale), system-ui, sans-serif;
+  --ax-font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --ax-font-locale: ui-sans-serif;
+
+  /* Type scale. Fluid between a 360px phone and a 1440px desktop. */
+  --ax-text-2xs: 0.6875rem; /* 11px — mono data labels only */
+  --ax-text-xs: 0.75rem;
+  --ax-text-sm: 0.875rem;
+  --ax-text-base: 1rem;
+  --ax-text-lg: 1.125rem;
+  --ax-text-xl: clamp(1.25rem, 0.5vw + 1.13rem, 1.375rem);
+  --ax-text-2xl: clamp(1.5rem, 1vw + 1.25rem, 1.75rem);
+  --ax-text-3xl: clamp(1.875rem, 1.6vw + 1.5rem, 2.25rem);
+  --ax-text-4xl: clamp(2.25rem, 2.6vw + 1.65rem, 3rem);
+  --ax-text-5xl: clamp(2.75rem, 4vw + 1.8rem, 4rem);
+
+  --ax-leading-tight: 1.12;
+  --ax-leading-snug: 1.3;
+  --ax-leading-normal: 1.6;
+  --ax-leading-relaxed: 1.75;
+
+  /* Body line length stays under 75 characters. */
+  --ax-measure: 68ch;
+  --ax-measure-narrow: 52ch;
+
+  /* ------------------------------------------------------------- spacing
+   * 4px base. Section rhythm uses the small --ax-section-* set rather than
+   * ad-hoc values.                                                        */
+  --ax-1: 0.25rem;
+  --ax-2: 0.5rem;
+  --ax-3: 0.75rem;
+  --ax-4: 1rem;
+  --ax-5: 1.25rem;
+  --ax-6: 1.5rem;
+  --ax-8: 2rem;
+  --ax-10: 2.5rem;
+  --ax-12: 3rem;
+  --ax-16: 4rem;
+  --ax-20: 5rem;
+  --ax-24: 6rem;
+
+  --ax-section-sm: clamp(2.5rem, 4vw, 3.5rem);
+  --ax-section-md: clamp(3.5rem, 6vw, 5rem);
+  --ax-section-lg: clamp(5rem, 8vw, 7rem);
+
+  --ax-gutter: clamp(1rem, 4vw, 2.5rem);
+  --ax-container: 80rem;
+  --ax-rail: 15rem; /* service-page left rail width */
+
+  /* --------------------------------------------------------------- radius
+   * Restrained and differentiated — identical rounded cards everywhere is on
+   * the "avoid" list.                                                     */
+  --ax-radius-sm: 2px;
+  --ax-radius: 4px;
+  --ax-radius-lg: 8px;
+
+  /* --------------------------------------------------------------- motion */
+  --ax-duration-fast: 120ms;
+  --ax-duration: 200ms;
+  --ax-duration-slow: 400ms;
+  --ax-ease: cubic-bezier(0.2, 0, 0.2, 1);
+}

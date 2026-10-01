@@ -1,0 +1,24 @@
+{
+  "common": {
+    "brand": "Automex",
+    "tagline": "Des systèmes qui tournent seuls",
+    "requestQuote": "Demander un devis",
+    "language": "Langue",
+    "skipToContent": "Aller au contenu"
+  },
+  "scaffold": {
+    "status": "Ossature",
+    "heading": "La construction démarre",
+    "intro": "La phase 0 est en place : l'API, les six langues, les jetons de design et le thème de l'administration. Le contenu des pages arrive dans les phases suivantes.",
+    "checks": {
+      "locales": "Six langues routées",
+      "direction": "Sens de lecture",
+      "tokens": "Jetons de design chargés",
+      "fonts": "Polices pour cette langue",
+      "api": "API de contenu"
+    },
+    "directionLtr": "De gauche à droite",
+    "directionRtl": "De droite à gauche",
+    "apiPending": "Connectée en phase 4"
+  }
+}

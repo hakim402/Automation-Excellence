@@ -1,0 +1,24 @@
+{
+  "common": {
+    "brand": "Automex",
+    "tagline": "Systems that run on their own",
+    "requestQuote": "Request a quote",
+    "language": "Language",
+    "skipToContent": "Skip to content"
+  },
+  "scaffold": {
+    "status": "Scaffold",
+    "heading": "The build is standing up",
+    "intro": "Phase 0 is in place: the API, the six locales, the design tokens and the admin theme. Page content arrives in the phases that follow.",
+    "checks": {
+      "locales": "Six locales routed",
+      "direction": "Text direction",
+      "tokens": "Design tokens loaded",
+      "fonts": "Font stack for this locale",
+      "api": "Content API"
+    },
+    "directionLtr": "Left to right",
+    "directionRtl": "Right to left",
+    "apiPending": "Connected in Phase 4"
+  }
+}

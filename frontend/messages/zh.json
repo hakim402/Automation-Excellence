@@ -1,0 +1,24 @@
+{
+  "common": {
+    "brand": "Automex",
+    "tagline": "自主运行的系统",
+    "requestQuote": "获取报价",
+    "language": "语言",
+    "skipToContent": "跳转到正文"
+  },
+  "scaffold": {
+    "status": "基础框架",
+    "heading": "项目已搭建完成",
+    "intro": "第 0 阶段已就绪：接口、六种语言、设计变量与后台主题均已配置。页面内容将在后续阶段陆续加入。",
+    "checks": {
+      "locales": "六种语言路由",
+      "direction": "文字方向",
+      "tokens": "设计变量已加载",
+      "fonts": "该语言的字体",
+      "api": "内容接口"
+    },
+    "directionLtr": "从左到右",
+    "directionRtl": "从右到左",
+    "apiPending": "将在第 4 阶段接入"
+  }
+}

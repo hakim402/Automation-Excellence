@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/*
+ * Tailwind v4 theme mapping. Every utility resolves to a token variable, so
+ * tokens.css stays the only place a value is written down.
+ */
+@theme inline {
+  --color-ax-petrol: var(--ax-petrol);
+  --color-ax-harbor: var(--ax-harbor);
+  --color-ax-amber: var(--ax-amber);
+  --color-ax-cyan: var(--ax-cyan);
+  --color-ax-mist: var(--ax-mist);
+  --color-ax-slate: var(--ax-slate);
+  --color-ax-paper: var(--ax-paper);
+
+  --color-ax-success: var(--ax-success);
+  --color-ax-warning: var(--ax-warning);
+  --color-ax-error: var(--ax-error);
+  --color-ax-info: var(--ax-info);
+
+  --color-ax-bg: var(--ax-bg);
+  --color-ax-surface: var(--ax-surface);
+  --color-ax-elevated: var(--ax-elevated);
+  --color-ax-border: var(--ax-border);
+  --color-ax-border-strong: var(--ax-border-strong);
+  --color-ax-hover: var(--ax-hover);
+  --color-ax-text: var(--ax-text);
+  --color-ax-muted: var(--ax-text-muted);
+
+  --font-display: var(--ax-font-display);
+  --font-body: var(--ax-font-body);
+  --font-mono: var(--ax-font-mono);
+
+  --text-2xs: var(--ax-text-2xs);
+  --text-xs: var(--ax-text-xs);
+  --text-sm: var(--ax-text-sm);
+  --text-base: var(--ax-text-base);
+  --text-lg: var(--ax-text-lg);
+  --text-xl: var(--ax-text-xl);
+  --text-2xl: var(--ax-text-2xl);
+  --text-3xl: var(--ax-text-3xl);
+  --text-4xl: var(--ax-text-4xl);
+  --text-5xl: var(--ax-text-5xl);
+
+  --radius-sm: var(--ax-radius-sm);
+  --radius-DEFAULT: var(--ax-radius);
+  --radius-lg: var(--ax-radius-lg);
+
+  --container-ax: var(--ax-container);
+
+  --spacing-section-sm: var(--ax-section-sm);
+  --spacing-section-md: var(--ax-section-md);
+  --spacing-section-lg: var(--ax-section-lg);
+  --spacing-gutter: var(--ax-gutter);
+  --spacing-rail: var(--ax-rail);
+
+  --ease-ax: var(--ax-ease);
+}
+
+/* -------------------------------------------------------------------- base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Sticky left rail and scroll-spy anchors need headroom. */
+  scroll-padding-top: var(--ax-16);
+}
+
+body {
+  margin: 0;
+  background-color: var(--ax-bg);
+  color: var(--ax-text);
+  font-family: var(--ax-font-body);
+  font-size: var(--ax-text-base);
+  line-height: var(--ax-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--ax-font-display);
+  line-height: var(--ax-leading-tight);
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  margin: 0;
+  /* Sentence case everywhere — no tracked-out all-caps eyebrows. */
+  text-transform: none;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--ax-cyan);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* Visible, branded focus ring. Never removed. */
+:focus-visible {
+  outline: 2px solid var(--ax-cyan);
+  outline-offset: 2px;
+  border-radius: var(--ax-radius-sm);
+}
+
+/* Real technical data only — never a decorative label. */
+.ax-mono {
+  font-family: var(--ax-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* ------------------------------------------------------------------- RTL
+ * Layout is built from logical properties, so direction needs almost no
+ * help. The exception is glyphs that carry direction: arrows and chevrons
+ * mirror, logos / screenshots / charts / numerals do not.               */
+[dir="rtl"] .ax-mirror {
+  transform: scaleX(-1);
+}
+
+/* Numerals stay Latin even in Arabic — they are data, not prose. */
+[dir="rtl"] .ax-mono,
+[dir="rtl"] [data-numeric] {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "common": {
+    "brand": "Automex",
+    "tagline": "Sistemas que funcionan solos",
+    "requestQuote": "Solicitar presupuesto",
+    "language": "Idioma",
+    "skipToContent": "Saltar al contenido"
+  },
+  "scaffold": {
+    "status": "Estructura",
+    "heading": "La construcción está en marcha",
+    "intro": "La fase 0 está lista: la API, los seis idiomas, los tokens de diseño y el tema del panel de administración. El contenido de las páginas llega en las fases siguientes.",
+    "checks": {
+      "locales": "Seis idiomas enrutados",
+      "direction": "Dirección del texto",
+      "tokens": "Tokens de diseño cargados",
+      "fonts": "Tipografías de este idioma",
+      "api": "API de contenido"
+    },
+    "directionLtr": "De izquierda a derecha",
+    "directionRtl": "De derecha a izquierda",
+    "apiPending": "Se conecta en la fase 4"
+  }
+}
