@@ -1,55 +1,50 @@
-# Handoff — Phase 2 checkpoint, October 2, 2026
+# Handoff — Phase 3 checkpoint, October 2, 2026
 
-**Phase 2 is implemented. Wait for the user's review and explicit instruction before Phase 3.**
-Read `CLAUDE.md` and `BUILD_PROMPT.md` before editing. The current acceptance report is
-[docs/PHASE_2_CHECKPOINT.md](docs/PHASE_2_CHECKPOINT.md).
+**Phase 3 is implemented. Wait for translation-quality review and explicit approval before Phase 4.**
+Read `CLAUDE.md` and `BUILD_PROMPT.md` before editing. See
+[the checkpoint](docs/PHASE_3_CHECKPOINT.md) and [live samples](docs/PHASE_3_TRANSLATION_SAMPLES.md).
 
 ## Current state
 
-- Phase 1 baseline: `5c84df2`, pushed to the configured GitHub remote.
-- Phase 2 implementation: `882d55c`, committed locally. No Phase 3 work has started.
-- 106 backend tests, Ruff checks, migration drift check, production Django checks, frontend build,
-  lint and typecheck passed. New migrations are applied locally.
-- Browser checks covered the dashboard in light/dark, dynamic Arabic product-feature inline
-  editing, and the existing frontend in English/Arabic. Temporary test servers were stopped.
-- No new dependencies, real client claims or demo content were added.
-- Never store credentials in this file, Git, screenshots or reports. Use the existing local admin
-  account. PostgreSQL is required; there is no SQLite fallback.
+- Phase 1 baseline `5c84df2` is on GitHub. Phase 2 implementation `882d55c` and its docs `e359b0a`
+  are committed locally. Phase 3 implementation is `dd517e2`; inline fix is `0b5e045`. These are local, not pushed.
+- 135 backend tests pass. Ruff, migration drift and production Django checks pass. Frontend build
+  passes; no frontend code changes in Phase 3. TranslationLog migration is applied locally.
+- Groq translations succeeded for AI & Automation and Cyber Security names in all five locales.
+  Both records are draft/machine. Rich HTML samples are in the report, not saved as website copy.
+- Use existing local credentials; never copy keys, passwords or raw provider errors into reports.
+- No dependencies were added. PostgreSQL is required. No Phase 4 APIs or seed_demo exist yet.
 
-## What exists
+## Implementation notes
 
-Ten Phase 2 apps now join `core` and `services`: `products`, `portfolio`, `digital_marketing`,
-`ai_automation`, `custom_software`, `web_development`, `mobile_development`, `cyber_security`,
-`blog` and `crm`. Shared video lives in `core`. All have admin screens and committed migrations.
+`apps.translations.services.GroqTranslator` batches saved English fields with blank targets,
+validates all output before each batch save, and checks concurrent edits under a row lock.
+`LanguageTabsMixin` supplies confirmation-based bulk/detail actions to translated models.
+Related children are translated separately. Machine text resets publishable records to draft.
+Audit logs contain only field names, IDs, locale, outcome, attempts and fixed error codes.
+Retry from the record action; completed fields are kept. The CLI supports explicit model/IDs/locales.
 
-`core/content_admin.py` reuses native Unfold language tabs and translated inline templates.
-Its inline constructor receives the parent model, so field introspection must use `self.model`.
-Case-study proxy models are explicitly registered with modeltranslation; their admins filter
-lookups and force the corresponding service when saving.
+The Groq default changed to `qwen/qwen3.8-27b` because the previous model was retired. It is a
+preview model; recheck availability before production. The endpoint cannot redirect credentials.
+Requests use bounded retries and adaptive output budgets. Known protected names use opaque
+placeholders; HTML, URLs, numbers and length limits are validated after restoration.
 
-`config/admin_navigation.py` groups all implemented content. `config/dashboard.py` counts only
-permitted records and excludes proxies to prevent duplication. `templates/admin/index.html`
-renders its four widgets. The translation-review count already works for machine-marked rows;
-Groq actions and logs remain Phase 3.
+Admin operations are synchronous, limited to three records and 6,000 characters per batch by
+configurable defaults. Oversized individual fields fail safely; they are not silently truncated.
+There is no durable queue or global provider rate scheduler. Initial provider failures remain in
+local audit history, followed by successful translations and five safe no-op entries.
 
-`crm/notifications.py` sends minimal staff alerts after commit. Unsent alerts can be retried from
-admin. No durable queue exists. Live SMTP has not been tested. Configure `ADMIN_BASE_URL`,
-`LEAD_ALERT_RECIPIENTS`, SMTP values and `EMAIL_TIMEOUT` in `.env`; never copy real values into Git.
+Browser verification found unscoped `x-show="open"` in collapsible translated inlines. The condition
+now applies only to nested inlines with matching Alpine state; top-level panels use native details.
 
-Videos permit zero or one owner. Mobile features use plain text, one item per line. Editorial
-reference models reuse publication gates. Phase 4 must also filter machine-translated nested
-features, metrics, images, categories and tags, not only their published parents.
-
-`/api/v1/` remains a stub. No public serializers, capture endpoints or `seed_demo` have been
-implemented. The frontend remains the six-locale Blueprint scaffold with persisted light/dark/system
-selection. API transport lives in `src/lib/api.ts`; components use semantic design tokens.
+Phase 2 content/CRM architecture remains described in docs/PHASE_2_CHECKPOINT.md. Live SMTP is still
+unverified. Public serializers must gate both parent and child machine translations in Phase 4.
+The public frontend remains the localized Blueprint scaffold; its transport is src/lib/api.ts.
 
 ## Next phase, only after approval
 
-Phase 3 adds `apps.translations`, the Groq service, admin actions, translation logging and retry
-behavior. Fill only empty non-English fields, preserve proper nouns and HTML structure, record
-machine status, and never auto-publish. Show the user output quality in all five non-English
-locales before moving on. The existing `tag_signature()` helper supports HTML verification.
+Phase 4: public API and seed data per BUILD_PROMPT.md. Do not start until the user approves the
+Phase 3 output quality. Preserve all earlier phase constraints and real-fact boundaries.
 
 ## Implementation constraints
 

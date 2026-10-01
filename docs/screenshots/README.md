@@ -44,3 +44,12 @@ the old palette and are retained as historical evidence.
   six existing service drafts and empty lead/review queues.
 - `phase-2-product-inline-ar-dark.png`: newly added Arabic product-feature inline with unsaved
   test text. The browser sample was discarded; no product was created in the development database.
+
+## Phase 3 review
+
+Captured with the in-app browser at its default viewport:
+
+- `phase-3-translation-confirmation-dark.png`: selected-record Groq confirmation.
+- `phase-3-service-ar-dark.png`: actual saved Arabic service-name translation, RTL input.
+- `phase-3-translation-log-light.png`, `phase-3-translation-log-dark.png`: successful translations
+  and safe no-op rerun entries. Initial failures are retained farther down the audit history.

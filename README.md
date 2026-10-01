@@ -148,12 +148,13 @@ only so they never overwrite an admin's edits:
   pushes the language tabs further down. Collapse the set-once ones.
 - **Adding a translatable field means a migration** — it creates six columns, one per locale.
 
-## Phase 2 review checkpoint
+## Phase 3 review checkpoint
 
-Phase 2 content models, service-specific admin screens, products, shared video, portfolio,
-blog, private CRM and dashboard are ready for review. See
-[docs/PHASE_2_CHECKPOINT.md](docs/PHASE_2_CHECKPOINT.md) for verified behavior, run commands,
-email configuration and the manual review checklist. Phase 3 has not started.
+Phase 3 adds Groq translations from saved English into five languages, missing-field-only admin
+actions, bounded retries, strict HTML validation and an audit log. Generated text stays in draft
+until reviewed. See [the checkpoint](docs/PHASE_3_CHECKPOINT.md) for setup and manual review,
+and [live translation samples](docs/PHASE_3_TRANSLATION_SAMPLES.md) for all five languages.
+Phase 4 awaits your explicit approval.
 
 The public frontend remains the localized Blueprint scaffold. Content APIs arrive in Phase 4,
 and the public shell and pages in Phases 5–6. Live SMTP delivery still needs configured credentials
