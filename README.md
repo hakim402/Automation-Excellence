@@ -34,7 +34,7 @@ pip install -r requirements.txt
 cp .env.example .env          # then set SECRET_KEY and DATABASE_URL
 createdb automex              # or: psql -d postgres -c "CREATE DATABASE automex OWNER automex;"
 
-python manage.py migrate
+python manage.py migrate       # also seeds company facts and the six services
 python manage.py createsuperuser
 python manage.py runserver 8000
 ```
@@ -96,6 +96,33 @@ docs/screenshots/      checkpoint evidence
 
 ---
 
+## Content model
+
+Shared abstracts live in `apps/core/models.py` and everything inherits them:
+
+| abstract | gives you |
+|---|---|
+| `TimeStamped` | `created_at`, `updated_at` |
+| `TranslationTracked` | `translation_status` — **any model with a translatable field needs this** |
+| `Publishable` | `status`, `published_at`, plus `objects.published()` |
+| `SEOFields` | `meta_title`, `meta_description`, `og_image`, `noindex` |
+| `Ordered` | `order`, with `ordering = ["order", "pk"]` |
+| `RichTextSanitised` | sanitises the fields in `rich_text_fields` on every save |
+
+`Service` gates on `is_active` rather than `status`, which is why
+`translation_status` is its own abstract rather than part of `Publishable`.
+
+Rich text is allowed on `Service.body` and `FAQ.answer` only (the Phase 1
+subset of the allowlist in `BUILD_PROMPT.md`). Both are sanitised on write by
+`apps/core/sanitize.py`, so the database never holds markup we would not
+serve. FAQ answers use a narrower profile: links and lists, no headings.
+
+Two data migrations seed real facts, not demo content, and both fill blanks
+only so they never overwrite an admin's edits:
+
+- `core.0003` — company name, address, phones, email, domain
+- `services.0002` — the six service lines
+
 ## Things that will bite you
 
 - **`npm run lint` fails on `ml-4`, `text-left`, `pr-6` and friends.** That is deliberate. Shared
@@ -110,3 +137,13 @@ docs/screenshots/      checkpoint evidence
   back to Django's own templates.
 - **Docker files are reference only.** Deployment is a single VPS; nothing in the workflow uses
   `docker-compose.yml`.
+- **A model with a translatable field must inherit `TranslationTracked`.** Otherwise the Groq
+  pipeline has nowhere to record its work and the admin badge has nothing to read. Registering a
+  field in `translation.py` and forgetting the abstract is a 500 on the change form, not a
+  check-time error.
+- **`prepopulated_fields` and `search_fields` must name the `_en` column**, not the bare field.
+  modeltranslation replaces `name` with six real columns, so `{"slug": ("name",)}` raises
+  `KeyError` at render time.
+- **Unfold renders tab fieldsets after every untabbed one**, so each open `shared_fieldsets` entry
+  pushes the language tabs further down. Collapse the set-once ones.
+- **Adding a translatable field means a migration** — it creates six columns, one per locale.

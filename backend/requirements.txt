@@ -7,5 +7,14 @@ django-modeltranslation==0.20.6
 django-environ==0.14.0
 psycopg[binary]==3.3.6
 
+# HTML sanitisation for the rich-text fields. Django has no sanitiser of its
+# own (strip_tags removes all markup), and an allowlist is required by
+# CLAUDE.md section 5. nh3 is the maintained successor to bleach.
+nh3==0.3.7
+
+# Required by Django's ImageField, which uses it to verify that an upload is
+# genuinely an image rather than trusting the extension.
+Pillow==12.3.0
+
 # dev / lint
 ruff==0.16.9

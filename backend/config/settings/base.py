@@ -10,6 +10,8 @@ from pathlib import Path
 import environ
 from django.conf.locale import LANG_INFO
 
+from config.admin_navigation import NAVIGATION
+
 # backend/config/settings/base.py -> backend/
 BASE_DIR = Path(__file__).resolve().parents[2]
 
@@ -41,10 +43,11 @@ UNFOLD_APPS = [
     "unfold.contrib.filters",
     "unfold.contrib.forms",
     "unfold.contrib.inlines",
-    "unfold.contrib.import_export",
-    "unfold.contrib.guardian",
-    "unfold.contrib.simple_history",
 ]
+
+# django-modeltranslation must precede django.contrib.admin so its model
+# registry is populated before the admin autodiscovers.
+TRANSLATION_APPS = ["modeltranslation"]
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -61,12 +64,12 @@ THIRD_PARTY_APPS = [
 ]
 
 # Local apps. Registered as "apps.<name>" per CLAUDE.md section 5.
-# Populated from Phase 1 onwards.
-LOCAL_APPS: list[str] = []
+LOCAL_APPS = [
+    "apps.core",
+    "apps.services",
+]
 
-# modeltranslation must load before django.contrib.admin so its tabbed admin
-# can patch the admin forms. It is wired up in Phase 1.
-INSTALLED_APPS = UNFOLD_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = UNFOLD_APPS + TRANSLATION_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
 MIDDLEWARE = [
@@ -348,25 +351,6 @@ UNFOLD = {
     "SIDEBAR": {
         "show_search": True,
         "show_all_applications": False,
-        "navigation": [
-            # Service and content groups are appended in Phase 1 and Phase 2.
-            {
-                "title": "System",
-                "separator": True,
-                "collapsible": True,
-                "items": [
-                    {
-                        "title": "Users",
-                        "icon": "person",
-                        "link": "/admin/auth/user/",
-                    },
-                    {
-                        "title": "Groups",
-                        "icon": "group",
-                        "link": "/admin/auth/group/",
-                    },
-                ],
-            },
-        ],
+        "navigation": NAVIGATION,
     },
 }
