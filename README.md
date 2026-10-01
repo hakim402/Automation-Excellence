@@ -83,7 +83,7 @@ backend/
   config/settings/     base.py / dev.py / prod.py
   config/urls.py       admin + /api/v1/ only; never public HTML
   apps/                all Django apps, registered as apps.<name>
-  tests/               scaffold contract tests
+  tests/               scaffold, content, admin, CRM and dashboard regressions
 frontend/
   src/app/[locale]/    every route, six locales
   src/components/      sections/ and ui/
@@ -112,10 +112,10 @@ Shared abstracts live in `apps/core/models.py` and everything inherits them:
 `Service` uses the shared draft/published lifecycle plus `is_active`. Public queries
 exclude machine-translated records until reviewed. Newly migrated services remain drafts.
 
-Rich text is allowed on `Service.body` and `FAQ.answer` only (the Phase 1
-subset of the allowlist in `BUILD_PROMPT.md`). Both are sanitised on write by
-`apps/core/sanitize.py`, so the database never holds markup we would not
-serve. FAQ answers use a narrower profile: links and lists, no headings.
+Rich text is allowed on `Service.body`, `Product.body`, `CaseStudy.challenge`,
+`CaseStudy.solution`, `CaseStudy.outcome`, `Post.body` and `FAQ.answer`. Every locale
+is sanitised on model save by `apps/core/sanitize.py`. FAQ answers use a narrower
+profile: links and lists, no headings.
 
 Two data migrations seed real facts, not demo content, and both fill blanks
 only so they never overwrite an admin's edits:
@@ -148,11 +148,15 @@ only so they never overwrite an admin's edits:
   pushes the language tabs further down. Collapse the set-once ones.
 - **Adding a translatable field means a migration** — it creates six columns, one per locale.
 
-## Phase 1 review checkpoint
+## Phase 2 review checkpoint
 
-Phase 1 implementation and the revised Blueprint scaffold are ready for review.
-See [docs/PHASE_1_CHECKPOINT.md](docs/PHASE_1_CHECKPOINT.md) for validation,
-run commands and the manual review checklist. Phase 2 has not started.
+Phase 2 content models, service-specific admin screens, products, shared video, portfolio,
+blog, private CRM and dashboard are ready for review. See
+[docs/PHASE_2_CHECKPOINT.md](docs/PHASE_2_CHECKPOINT.md) for verified behavior, run commands,
+email configuration and the manual review checklist. Phase 3 has not started.
 
-`next-themes` is the only new frontend dependency: the updated specification
-requires persisted light/dark/system selection with a pre-paint theme script.
+The public frontend remains the localized Blueprint scaffold. Content APIs arrive in Phase 4,
+and the public shell and pages in Phases 5–6. Live SMTP delivery still needs configured credentials
+and recipient verification; automated email behavior is covered by tests.
+
+Earlier theme/admin work is recorded in [docs/PHASE_1_CHECKPOINT.md](docs/PHASE_1_CHECKPOINT.md).

@@ -37,3 +37,10 @@ Fresh browser captures for the revised checkpoint:
 These use the in-app browser's default viewport. Its 390px override did not
 apply correctly; no fresh mobile screenshot is claimed. Earlier PNGs document
 the old palette and are retained as historical evidence.
+
+## Phase 2 review
+
+- `phase-2-dashboard-light.png`, `phase-2-dashboard-dark.png`: live local admin dashboard;
+  six existing service drafts and empty lead/review queues.
+- `phase-2-product-inline-ar-dark.png`: newly added Arabic product-feature inline with unsaved
+  test text. The browser sample was discarded; no product was created in the development database.
