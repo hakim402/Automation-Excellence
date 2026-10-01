@@ -25,3 +25,15 @@ from the phase report.
 | `p1-site-settings.png` | The singleton, with the real company facts seeded |
 | `p1-tabs-english.png` | Six language tabs on one form, English first |
 | `p1-tabs-arabic.png` | Arabic tab active, inputs switched to RTL |
+
+## Revised Phase 1 — Blueprint
+
+Fresh browser captures for the revised checkpoint:
+
+- `p1-blueprint-en-light.jpg` and `p1-blueprint-en-dark.jpg`
+- `p1-blueprint-ar-light.jpg` and `p1-blueprint-ar-dark.jpg`
+- `p1-blueprint-admin-ar.jpg` — Arabic rich-text editor
+
+These use the in-app browser's default viewport. Its 390px override did not
+apply correctly; no fresh mobile screenshot is claimed. Earlier PNGs document
+the old palette and are retained as historical evidence.

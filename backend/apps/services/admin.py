@@ -16,6 +16,7 @@ from unfold.decorators import display
 
 from apps.core.admin_mixins import (
     LanguageTabsMixin,
+    PublishStatusMixin,
     TranslationStatusMixin,
     image_preview,
 )
@@ -23,34 +24,37 @@ from apps.core.admin_mixins import (
 from .models import FAQ, ProcessStep, Service, ServiceOffering
 
 
-class ServiceOfferingInline(StackedInline):
+class ServiceOfferingInline(LanguageTabsMixin, StackedInline):
     """The "what we do" cards."""
 
     model = ServiceOffering
     extra = 0
-    fields = ("order", "icon", "title", "description")
+    shared_fieldsets = ((None, {"fields": ("order", "icon", "translation_status")}),)
+    template = "admin/core/translated_stacked.html"
     ordering = ("order",)
     verbose_name = "Offering"
     verbose_name_plural = "Offerings — the 'what we do' cards"
     classes = ("collapse",)
 
 
-class ProcessStepInline(StackedInline):
+class ProcessStepInline(LanguageTabsMixin, StackedInline):
     """How we work. A real sequence, so `order` is the step number."""
 
     model = ProcessStep
     extra = 0
-    fields = ("order", "title", "description")
+    shared_fieldsets = ((None, {"fields": ("order", "translation_status")}),)
+    template = "admin/core/translated_stacked.html"
     ordering = ("order",)
     verbose_name = "Process step"
     verbose_name_plural = "Process — shown as a numbered sequence"
     classes = ("collapse",)
 
 
-class FAQInline(StackedInline):
+class FAQInline(LanguageTabsMixin, StackedInline):
     model = FAQ
     extra = 0
-    fields = ("order", "question", "answer")
+    shared_fieldsets = ((None, {"fields": ("order", "translation_status")}),)
+    template = "admin/core/translated_stacked.html"
     ordering = ("order",)
     verbose_name = "FAQ"
     verbose_name_plural = "FAQs for this service"
@@ -58,7 +62,7 @@ class FAQInline(StackedInline):
 
 
 @admin.register(Service)
-class ServiceAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
+class ServiceAdmin(LanguageTabsMixin, PublishStatusMixin, TranslationStatusMixin, ModelAdmin):
     hero_image_preview = image_preview("hero_image", height=160)
     og_image_preview = image_preview("og_image")
 
@@ -73,19 +77,33 @@ class ServiceAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
         "meta_description",
     )
 
-    list_display = ("name", "slug", "is_active", "content_summary", "translation_badge", "order")
-    list_filter = ("is_active", "translation_status")
+    list_display = (
+        "name",
+        "slug",
+        "is_active",
+        "publish_badge",
+        "content_summary",
+        "translation_badge",
+        "order",
+    )
+    list_filter = ("is_active", "status", "translation_status")
     list_editable = ("order",)
-    search_fields = ("name", "slug", "key")
+    search_fields = ("name_en", "slug", "key")
     filter_horizontal = ("tools", "industries")
-    readonly_fields = ("hero_image_preview", "og_image_preview", "created_at", "updated_at")
+    readonly_fields = (
+        "hero_image_preview",
+        "og_image_preview",
+        "published_at",
+        "created_at",
+        "updated_at",
+    )
     inlines = (ServiceOfferingInline, ProcessStepInline, FAQInline)
 
     shared_fieldsets = (
         (
             "Identity",
             {
-                "fields": ("key", "slug", "icon", "order", "is_active"),
+                "fields": ("key", "slug", "icon", "order", "is_active", "status"),
                 "description": (
                     "The slug is the URL segment and stays English in every language "
                     "(/ar/cyber-security). Changing it after launch breaks links."
@@ -114,7 +132,7 @@ class ServiceAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
         ),
         (
             "History",
-            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+            {"fields": ("published_at", "created_at", "updated_at"), "classes": ("collapse",)},
         ),
     )
 
@@ -139,9 +157,9 @@ class ServiceAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
 @admin.register(ServiceOffering)
 class ServiceOfferingAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
     list_display = ("title", "service", "translation_badge", "order")
-    list_filter = ("service", "translation_status")
+    list_filter = ("service__key", "translation_status")
     list_editable = ("order",)
-    search_fields = ("title",)
+    search_fields = ("title_en",)
     autocomplete_fields = ("service",)
     shared_fieldsets = ((None, {"fields": ("service", "icon", "order", "translation_status")}),)
 
@@ -149,9 +167,9 @@ class ServiceOfferingAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin
 @admin.register(ProcessStep)
 class ProcessStepAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
     list_display = ("title", "service", "order", "translation_badge")
-    list_filter = ("service", "translation_status")
+    list_filter = ("service__key", "translation_status")
     list_editable = ("order",)
-    search_fields = ("title",)
+    search_fields = ("title_en",)
     autocomplete_fields = ("service",)
     shared_fieldsets = (
         (
@@ -167,9 +185,9 @@ class ProcessStepAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
 @admin.register(FAQ)
 class FAQAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
     list_display = ("question", "service_label", "translation_badge", "order")
-    list_filter = ("service", "translation_status")
+    list_filter = ("service__key", "translation_status")
     list_editable = ("order",)
-    search_fields = ("question", "answer")
+    search_fields = ("question_en", "answer_en")
     autocomplete_fields = ("service",)
     shared_fieldsets = (
         (

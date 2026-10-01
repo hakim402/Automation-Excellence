@@ -11,6 +11,7 @@ import environ
 from django.conf.locale import LANG_INFO
 
 from config.admin_navigation import NAVIGATION
+from config.admin_theme import ADMIN_COLORS
 
 # backend/config/settings/base.py -> backend/
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -293,15 +294,7 @@ LOGGING = {
 # --------------------------------------------------------------------------
 # Unfold admin
 #
-# Palette is the Deep Harbor brand (CLAUDE.md section 8): the primary ramp is
-# anchored on cyan #3FC9CE (400), harbor #0E4553 (900) and petrol #0A2830
-# (950); the base ramp runs mist #F2F6F6 -> slate #8FA9AE -> petrol so the
-# dark admin sits on the brand background. Amber is not in either ramp: it is
-# reserved for status badges, so it stays rare.
-#
-# SIDEBAR navigation is grouped by service, which is what makes six services
-# read as six sections over a deliberately shared model layer. Groups are
-# added as their models land, phase by phase.
+# Blueprint colours for Unfold's native light/dark themes.
 # --------------------------------------------------------------------------
 
 UNFOLD = {
@@ -312,42 +305,7 @@ UNFOLD = {
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
     "SHOW_LANGUAGES": False,  # admin is English only
-    "COLORS": {
-        "primary": {
-            "50": "236 251 251",
-            "100": "211 245 245",
-            "200": "171 235 236",
-            "300": "116 220 222",
-            "400": "63 201 206",
-            "500": "36 170 177",
-            "600": "27 136 143",
-            "700": "26 108 116",
-            "800": "26 88 95",
-            "900": "14 69 83",
-            "950": "10 40 48",
-        },
-        "base": {
-            "50": "242 246 246",
-            "100": "228 235 236",
-            "200": "203 216 218",
-            "300": "168 188 192",
-            "400": "143 169 174",
-            "500": "107 133 139",
-            "600": "85 108 114",
-            "700": "68 88 94",
-            "800": "42 64 72",
-            "900": "22 50 59",
-            "950": "10 40 48",
-        },
-        "font": {
-            "subtle-light": "107 133 139",
-            "subtle-dark": "143 169 174",
-            "default-light": "22 50 59",
-            "default-dark": "234 242 242",
-            "important-light": "10 40 48",
-            "important-dark": "255 255 255",
-        },
-    },
+    "COLORS": ADMIN_COLORS,
     "SIDEBAR": {
         "show_search": True,
         "show_all_applications": False,

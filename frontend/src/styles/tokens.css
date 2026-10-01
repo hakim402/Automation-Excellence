@@ -1,43 +1,27 @@
-/*
- * Automex design tokens — the single source of truth for colour, type and
- * spacing (CLAUDE.md section 8). A hard-coded hex in a component is a bug.
- *
- * Palette is "Deep Harbor". The seven brand colours below are fixed; no
- * colour outside them may be introduced. The --ax-* entries further down are
- * *derivations* (alpha and mixes of brand colours), not additions — they exist
- * so components never need to invent a border or hover value.
- */
-
+/* Blueprint brand values live here. Components use semantic tokens only. */
 :root {
-  /* ---------------------------------------------------------------- brand */
-  --ax-petrol: #0a2830; /* anchor. dark backgrounds, logo lockup      */
-  --ax-harbor: #0e4553; /* raised surfaces, cards, panels, borders    */
-  --ax-amber: #ffb627;  /* signature accent. CTAs, key metrics. RARE  */
-  --ax-cyan: #3fc9ce;   /* secondary accent. links, data, diagrams    */
-  --ax-mist: #f2f6f6;   /* light background — print, decks, light     */
-  --ax-slate: #8fa9ae;  /* secondary text, captions, muted UI         */
-  --ax-paper: #eaf2f2;  /* primary text on dark                       */
+  --brand-navy: #0B2545;
+  --brand-draft: #123C6B;
+  --brand-marker: #FF4D2E;
+  --brand-marker-d: #C9341A;
+  --brand-chalk: #EAF4FB;
+  --brand-paper: #F5F8FB;
+  --brand-graphite: #7D93AC;
+  --brand-slate: #5A7490;
 
-  /* ------------------------------------------------------------- semantic */
-  --ax-success: #3dbe8b;
-  --ax-warning: #ffb627; /* reuses amber by design */
-  --ax-error: #e5484d;
-  --ax-info: #3fc9ce;
-
-  /* --------------------------------------------- surfaces (dark-first)
-   * Derived from petrol + harbor only. `elevated` sits between the two so a
-   * panel can lift off the page without a shadow.                        */
-  --ax-bg: var(--ax-petrol);
-  --ax-surface: color-mix(in oklab, var(--ax-harbor) 55%, var(--ax-petrol));
-  --ax-elevated: var(--ax-harbor);
-  --ax-border: color-mix(in oklab, var(--ax-slate) 20%, transparent);
-  --ax-border-strong: color-mix(in oklab, var(--ax-slate) 38%, transparent);
-  --ax-hover: color-mix(in oklab, var(--ax-harbor) 75%, var(--ax-petrol));
-
-  /* --------------------------------------------------------------- text */
-  --ax-text: var(--ax-paper);
-  --ax-text-muted: var(--ax-slate);
-  --ax-text-on-amber: var(--ax-petrol); /* amber is a fill, never a text colour */
+  color-scheme: light;
+  --bg: var(--brand-paper);
+  --surface: #FFFFFF;
+  --border: #D8E2EC;
+  --text: var(--brand-navy);
+  --text-2: #2E4A68;
+  --text-mute: var(--brand-slate);
+  --accent: var(--brand-marker-d);
+  --on-accent: #FFFFFF;
+  --link: #1A4C87;
+  --success: #1E7F56;
+  --warning: #9A6400;
+  --danger: #B3261E;
 
   /* --------------------------------------------------------------- type
    * Families are wired to next/font CSS variables in src/styles/fonts.ts.
@@ -105,4 +89,56 @@
   --ax-duration: 200ms;
   --ax-duration-slow: 400ms;
   --ax-ease: cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: var(--brand-navy);
+  --surface: var(--brand-draft);
+  --border: #1C4578;
+  --text: var(--brand-chalk);
+  --text-2: #C5D8E8;
+  --text-mute: var(--brand-graphite);
+  --accent: var(--brand-marker);
+  --on-accent: var(--brand-navy);
+  --link: #7FB2E8;
+  --success: #4ED29A;
+  --warning: #FFC247;
+  --danger: #FF7B6E;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+  color-scheme: dark;
+  --bg: var(--brand-navy);
+  --surface: var(--brand-draft);
+  --border: #1C4578;
+  --text: var(--brand-chalk);
+  --text-2: #C5D8E8;
+  --text-mute: var(--brand-graphite);
+  --accent: var(--brand-marker);
+  --on-accent: var(--brand-navy);
+  --link: #7FB2E8;
+  --success: #4ED29A;
+  --warning: #FFC247;
+  --danger: #FF7B6E;
+  }
+}
+
+@media print {
+  :root, [data-theme="dark"] {
+    color-scheme: light;
+    --bg: var(--brand-paper);
+    --surface: #FFFFFF;
+    --border: #D8E2EC;
+    --text: var(--brand-navy);
+    --text-2: #2E4A68;
+    --text-mute: var(--brand-slate);
+    --accent: var(--brand-marker-d);
+    --on-accent: #FFFFFF;
+    --link: #1A4C87;
+    --success: #1E7F56;
+    --warning: #9A6400;
+    --danger: #B3261E;
+  }
 }

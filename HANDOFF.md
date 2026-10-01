@@ -1,3 +1,13 @@
+# Current checkpoint — October 1, 2026
+
+Phase 1 corrections and the updated Blueprint scaffold are implemented. **Wait for
+the user's review and explicit instruction before Phase 2.** The historical notes
+below describe the earlier implementation and are superseded by
+[docs/PHASE_1_CHECKPOINT.md](docs/PHASE_1_CHECKPOINT.md), particularly publication
+rules, inline language editing, editor widgets, sidebar groups and theming.
+
+---
+
 # Handoff — Automex build
 
 **For the agent taking over.** Phases 0 and 1 are built, committed and green.

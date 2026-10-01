@@ -1,7 +1,6 @@
 {
   "common": {
     "brand": "Automex",
-    "tagline": "Sistemas que funcionan solos",
     "requestQuote": "Solicitar presupuesto",
     "language": "Idioma",
     "skipToContent": "Saltar al contenido"
@@ -20,5 +19,11 @@
     "directionLtr": "De izquierda a derecha",
     "directionRtl": "De derecha a izquierda",
     "apiPending": "Se conecta en la fase 4"
+  },
+  "theme": {
+    "label": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
   }
 }

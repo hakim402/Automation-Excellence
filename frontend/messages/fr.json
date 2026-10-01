@@ -1,7 +1,6 @@
 {
   "common": {
     "brand": "Automex",
-    "tagline": "Des systèmes qui tournent seuls",
     "requestQuote": "Demander un devis",
     "language": "Langue",
     "skipToContent": "Aller au contenu"
@@ -20,5 +19,11 @@
     "directionLtr": "De gauche à droite",
     "directionRtl": "De droite à gauche",
     "apiPending": "Connectée en phase 4"
+  },
+  "theme": {
+    "label": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
   }
 }

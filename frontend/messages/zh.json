@@ -1,7 +1,6 @@
 {
   "common": {
     "brand": "Automex",
-    "tagline": "自主运行的系统",
     "requestQuote": "获取报价",
     "language": "语言",
     "skipToContent": "跳转到正文"
@@ -20,5 +19,11 @@
     "directionLtr": "从左到右",
     "directionRtl": "从右到左",
     "apiPending": "将在第 4 阶段接入"
+  },
+  "theme": {
+    "label": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
   }
 }

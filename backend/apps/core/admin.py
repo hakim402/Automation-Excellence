@@ -46,7 +46,6 @@ class SiteSettingsAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
         "logo_dark_preview",
         "favicon_preview",
         "default_og_image_preview",
-        "translation_status",
     )
 
     shared_fieldsets = (
@@ -179,6 +178,7 @@ class ToolAdmin(ModelAdmin):
 class IndustryAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
     list_display = ("name", "slug", "translation_badge", "order")
     list_editable = ("order",)
+    list_filter = ("translation_status",)
     search_fields = ("name_en", "slug")
     prepopulated_fields = {"slug": ("name_en",)}
     shared_fieldsets = ((None, {"fields": ("slug", "icon", "order", "translation_status")}),)
@@ -231,7 +231,7 @@ class TeamMemberAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
 
     list_display = ("photo_thumb", "name", "is_active", "translation_badge", "order")
     list_display_links = ("photo_thumb", "name")
-    list_filter = ("is_active",)
+    list_filter = ("is_active", "translation_status")
     list_editable = ("order",)
     search_fields = ("name",)
     readonly_fields = ("photo_preview",)
@@ -249,9 +249,9 @@ class TeamMemberAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
 @admin.register(Stat)
 class StatAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
     list_display = ("__str__", "service", "translation_badge", "order")
-    list_filter = ("service",)
+    list_filter = ("service", "translation_status")
     list_editable = ("order",)
-    search_fields = ("label",)
+    search_fields = ("label_en",)
     autocomplete_fields = ("service",)
     shared_fieldsets = (
         (

@@ -109,8 +109,8 @@ Shared abstracts live in `apps/core/models.py` and everything inherits them:
 | `Ordered` | `order`, with `ordering = ["order", "pk"]` |
 | `RichTextSanitised` | sanitises the fields in `rich_text_fields` on every save |
 
-`Service` gates on `is_active` rather than `status`, which is why
-`translation_status` is its own abstract rather than part of `Publishable`.
+`Service` uses the shared draft/published lifecycle plus `is_active`. Public queries
+exclude machine-translated records until reviewed. Newly migrated services remain drafts.
 
 Rich text is allowed on `Service.body` and `FAQ.answer` only (the Phase 1
 subset of the allowlist in `BUILD_PROMPT.md`). Both are sanitised on write by
@@ -147,3 +147,12 @@ only so they never overwrite an admin's edits:
 - **Unfold renders tab fieldsets after every untabbed one**, so each open `shared_fieldsets` entry
   pushes the language tabs further down. Collapse the set-once ones.
 - **Adding a translatable field means a migration** — it creates six columns, one per locale.
+
+## Phase 1 review checkpoint
+
+Phase 1 implementation and the revised Blueprint scaffold are ready for review.
+See [docs/PHASE_1_CHECKPOINT.md](docs/PHASE_1_CHECKPOINT.md) for validation,
+run commands and the manual review checklist. Phase 2 has not started.
+
+`next-themes` is the only new frontend dependency: the updated specification
+requires persisted light/dark/system selection with a pre-paint theme script.

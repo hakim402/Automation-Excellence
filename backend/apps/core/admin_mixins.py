@@ -10,6 +10,7 @@ from django.conf import settings
 from django.utils.html import format_html
 from modeltranslation.translator import NotRegistered, translator
 from modeltranslation.utils import build_localized_fieldname
+from unfold.contrib.forms.widgets import WysiwygWidget
 from unfold.decorators import display
 
 from .models import PublishStatus, TranslationStatus
@@ -67,11 +68,16 @@ def render_image(image, *, height: int) -> str:
     if not image:
         return format_html('<span class="text-base-400">Nothing uploaded</span>')
     return format_html(
-        '<img src="{}" alt="" loading="lazy" '
-        'style="height:{}px;width:auto;border-radius:4px;background:#0e4553;padding:2px" />',
+        '<img src="{}" alt="" loading="lazy" style="height:{}px;width:auto;border-radius:4px" />',
         image.url,
         height,
     )
+
+
+class RestrictedWysiwygWidget(WysiwygWidget):
+    """Unfold's editor with stable IDs for translated, dynamically added inlines."""
+
+    template_name = "admin/core/wysiwyg.html"
 
 
 class LanguageTabsMixin:
@@ -99,6 +105,9 @@ class LanguageTabsMixin:
     #: translatable field left out of this list is appended rather than
     #: dropped, so adding one later cannot quietly hide it from translators.
     translated_field_order: tuple[str, ...] = ()
+
+    class Media:
+        js = ("core/admin-editors.js",)
 
     def get_translated_fields(self) -> tuple[str, ...]:
         declared = translated_fields_for(self.model)
@@ -145,6 +154,11 @@ class LanguageTabsMixin:
         if formfield is None:
             return None
 
+        original = getattr(db_field, "translated_field", db_field)
+        if original.name in getattr(self.model, "rich_text_fields", ()):
+            profile = getattr(self.model, "rich_text_profiles", {}).get(original.name, "default")
+            formfield.widget = RestrictedWysiwygWidget(attrs={"data-rich-text-profile": profile})
+
         for code, _label in settings.LANGUAGES:
             if db_field.name.endswith(f"_{code}"):
                 formfield.widget.attrs["lang"] = code
@@ -163,13 +177,13 @@ class TranslationStatusMixin:
         label=TRANSLATION_STATUS_COLOURS,
         ordering="translation_status",
     )
-    def translation_badge(self, obj) -> str:
-        return obj.get_translation_status_display()
+    def translation_badge(self, obj) -> tuple[str, str]:
+        return obj.translation_status, obj.get_translation_status_display()
 
 
 class PublishStatusMixin:
     """Adds a coloured publish-status badge for `list_display`."""
 
     @display(description="Status", label=PUBLISH_STATUS_COLOURS, ordering="status")
-    def publish_badge(self, obj) -> str:
-        return obj.get_status_display()
+    def publish_badge(self, obj) -> tuple[str, str]:
+        return obj.status, obj.get_status_display()

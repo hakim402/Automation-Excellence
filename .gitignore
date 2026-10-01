@@ -1,3 +1,14 @@
 .DS_Store
 .env
 .env.local
+
+# Local credentials and machine-specific configuration
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+.aws/
+.ssh/

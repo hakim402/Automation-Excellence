@@ -77,7 +77,9 @@ Never start a server to "check if it works" and leave it running. Build, verify,
 
 ## 4. Non-negotiables
 
-1. **No secrets in code.** Every key, URL, and credential comes from environment variables.
+1. **No secrets in code or Git history.** Never commit real passwords, API tokens, private keys,
+   or local environment files. Before pushing, check both staged files and outgoing history.
+   Every key, URL, and credential comes from environment variables.
    Adding a new variable means adding it to `.env.example` in the same commit.
 2. **No public page fetches data in the browser.** All SEO-relevant content is fetched server-side
    (RSC / `generateStaticParams`). A `useEffect` that loads page content is a bug — crawlers see an
@@ -207,6 +209,12 @@ Prefer external hosting (YouTube/Vimeo) over self-hosted files; a VPS serving vi
 - No component library ships design decisions for us — tokens in `src/styles/tokens.css` are the
   single source of truth for color, type, and spacing. Tailwind config maps to those tokens.
   A hard-coded hex in a component is a bug.
+- **Theme switching**: use `next-themes` with `attribute="data-theme"` and `defaultTheme="system"`.
+  The provider is a client component wrapping `children` in the locale layout; everything inside
+  stays a Server Component. Add `suppressHydrationWarning` to `<html>`.
+  The theme toggle offers three states — light, dark, system — not a two-way switch; a two-way switch
+  gives the user no way back to following their OS.
+  See §8 for the token values and the mode rules that go with them.
 
 ---
 
@@ -226,52 +234,98 @@ Prefer external hosting (YouTube/Vimeo) over self-hosted files; a VPS serving vi
 
 ## 8. Design system
 
-Dark-first. The brand reference is precision instrumentation and industrial control panels —
-Automex builds systems that run on their own. Calm, dense, engineered. Not a gradient SaaS landing page.
+The brand reference is engineering drawings and systems design — Automex builds systems that run on
+their own. Calm, dense, precise. Not a gradient SaaS landing page.
 
-### Brand palette — "Deep Harbor"
-This is the official Automex brand palette. It governs the website, decks, posters, social posts,
-and print. Do not introduce colours outside it.
+**The site ships both light and dark modes, as equals.** Neither is an afterthought. Every screen,
+component, image, and diagram must be checked in both before it is called done.
+
+### Brand palette — "Blueprint"
+These are the brand colours. They govern the website, decks, posters, social posts, and print.
+Do not introduce colours outside this set.
 
 ```
---ax-petrol:   #0A2830   brand anchor. Dark backgrounds, logo lockup, text on light
---ax-harbor:   #0E4553   raised surfaces, cards, panels, borders
---ax-amber:    #FFB627   signature accent. CTAs, key metrics, highlights
---ax-cyan:     #3FC9CE   secondary accent. Links, data, diagrams, icons
---ax-mist:     #F2F6F6   light background — print, decks, light mode
---ax-slate:    #8FA9AE   secondary text, captions, muted UI
---ax-paper:    #EAF2F2   primary text on dark
+--brand-navy:     #0B2545   anchor. Dark backgrounds, light-mode text, logo lockup
+--brand-draft:    #123C6B   dark-mode raised surfaces and borders
+--brand-marker:   #FF4D2E   signature accent, dark mode
+--brand-marker-d: #C9341A   signature accent, light mode (darkened for contrast)
+--brand-chalk:    #EAF4FB   light text on dark
+--brand-paper:    #F5F8FB   light-mode page background
+--brand-graphite: #7D93AC   muted text on dark
+--brand-slate:    #5A7490   muted text on light
 ```
 
-Semantic: success `#3DBE8B` · warning `#FFB627` (reuses amber) · error `#E5484D` · info `#3FC9CE`.
+**Swapping palettes later changes only these eight values.** Nothing else in the codebase names a colour.
 
-**Usage ratio:** petrol ~55%, mist ~25%, cyan ~12%, amber ~8%. Amber is the loudest element on any
-surface and must stay rare — more than a handful of amber elements on a page means the hierarchy failed.
+### Semantic tokens — the only thing components may reference
 
-**Contrast rules, non-negotiable:**
-- Amber never carries text on white or mist — it fails AA. Amber is always a *fill*, with petrol text on it.
-- Cyan is for links and data on dark only; on mist use petrol.
-- Body text is `--ax-paper` on dark, `--ax-petrol` on mist.
+Components **never** use a brand variable or a hex value. They use semantic tokens, which are defined
+once in `src/styles/tokens.css` with a light and a dark value:
 
-**Marketing gradient** (decks, posters only, never UI chrome): `#0A2830 → #0E4553`, with amber as the
-only warm note. No gradients in the product UI.
+```
+             light mode     dark mode        purpose
+--bg         #F5F8FB        #0B2545          page background
+--surface    #FFFFFF        #123C6B          cards, panels, raised areas
+--border     #D8E2EC        #1C4578          hairlines, dividers
+--text       #0B2545        #EAF4FB          primary text
+--text-2     #2E4A68        #C5D8E8          body and supporting text
+--text-mute  #5A7490        #7D93AC          captions, metadata, placeholders
+--accent     #C9341A        #FF4D2E          CTAs, key metrics
+--on-accent  #FFFFFF        #0B2545          text on an accent fill
+--link       #1A4C87        #7FB2E8          inline links
+--success    #1E7F56        #4ED29A
+--warning    #9A6400        #FFC247
+--danger     #B3261E        #FF7B6E
+```
 
-**Type**
-- Display: **Archivo** (industrial American grotesque). Headlines, service names, numbers.
+Dark mode is `[data-theme="dark"]` on `<html>`, with `prefers-color-scheme` as the initial default.
+
+**Why `--accent` differs between modes:** `#FF4D2E` on white fails WCAG AA, so light mode darkens it
+to `#C9341A` and flips the text on it to white. Same brand, two values. This pattern applies to any
+accent — never reuse one accent hex across both modes without checking contrast.
+
+### Mode rules
+- **No hard-coded hex in any component.** This is a bug, not a style preference.
+- **Never use `opacity` to mute text.** Opacity multiplies against whatever is behind it and drifts
+  between modes. Use `--text-mute`.
+- **No flash of wrong theme.** An inline script in `<head>` sets `data-theme` before first paint,
+  reading `localStorage` then falling back to `prefers-color-scheme`.
+- **Toggle persists** in `localStorage` and never overrides an explicit user choice on return.
+- **Both logo variants** live in `SiteSettings` (`logo` for dark backgrounds, `logo_dark` for light).
+  Pick by mode with a CSS-swapped `<picture>`, not a client-side JS check — JS picking runs after paint.
+- **Images and screenshots do not invert.** If a case study screenshot is a light UI, give it a
+  neutral mat in dark mode rather than filtering it. Never apply `filter: invert()` to content images.
+- **Inline SVG diagrams use `currentColor`** or semantic tokens so they follow the mode. A diagram
+  exported as a flat PNG will look broken in one of the two modes.
+- **`og:image` is dark only.** Social cards have no mode, so pick one and keep it consistent.
+- **Print stylesheet forces the light tokens.** Nobody wants a navy page coming out of a printer.
+
+### Usage ratio
+Navy or paper ~60%, surface ~25%, link blue ~10%, marker accent ~5%. The marker is the loudest element
+on any surface and must stay rare — more than a handful of accent elements on a page means the
+hierarchy has failed.
+
+### Type
+- Display: **Archivo** (industrial grotesque). Headlines, service names, numbers.
 - Body: **Inter**. All running text and UI.
 - Technical: **IBM Plex Mono** — restricted to real technical data (tech stacks, metrics, code).
   Never as a decorative label.
 - Arabic: **IBM Plex Sans Arabic**. Chinese: **Noto Sans SC**.
 - Body line length under 75 characters. Sentence case everywhere — no tracked-out all-caps eyebrows.
 
-**Layout**
+### Marketing
+For decks, posters, and social, the light set is navy-on-paper and the dark set is chalk-on-navy, with
+marker red as the single accent in both. A `#0B2545 → #123C6B` gradient is permitted in marketing
+artwork only — never in the product UI.
+
+### Layout
 - Service pages use a persistent left rail (sticky, scroll-spy anchors) beside the content column.
   This is the direct answer to "customers can't find what they're looking for" and it mirrors the
   admin's per-service structure.
 - Content is left-aligned (start-aligned). Centered text only in the hero and section intros.
 - Spacing scale is 4px-based; section rhythm comes from a small set of vertical steps, not ad-hoc values.
 
-**Motion**
+### Motion
 - One orchestrated moment per page, at most. Fade-and-slide on every section is forbidden.
 - Motion that responds to a user action (opening, expanding, confirming) is welcome.
 - `prefers-reduced-motion` is respected everywhere.
@@ -319,7 +373,9 @@ Treat these as acceptance criteria, not suggestions.
 - **Read before writing.** Inspect existing models, tokens, and components before adding new ones.
   Duplicate patterns are worse than imperfect reuse.
 - **Work in the phase order** given in `BUILD_PROMPT.md`. Stop at each checkpoint and report.
-- **Small, coherent commits** with messages saying what changed and why.
+- **Small, coherent commits** with professional messages saying what changed and why.
+  Commit each completed, verified change; do not leave finished implementation work uncommitted.
+  Prefer conventional prefixes such as `feat:`, `fix:`, `test:`, and `docs:`.
 - **Never invent business facts.** Client names, metrics, certifications, and testimonials come from
   the user. Seed data must be obviously placeholder, never a fabricated real client.
 - **State assumptions out loud.** If the spec is silent, choose the simpler option, implement it,

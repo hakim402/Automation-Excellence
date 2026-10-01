@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
 import { directionOf, type Locale } from "@/i18n/routing";
 
@@ -7,7 +8,7 @@ import { directionOf, type Locale } from "@/i18n/routing";
  * Phase 0 placeholder.
  *
  * Its job is to prove the scaffold: six routed locales, correct `dir`, the
- * Deep Harbor tokens, and the right font stack per locale. It is replaced by
+ * Blueprint tokens, and the right font stack per locale. It is replaced by
  * the real home page in Phase 6.
  *
  * Written with logical properties only (ms/me, ps/pe, text-start, border-s),
@@ -33,43 +34,42 @@ export default async function ScaffoldPage({ params }: { params: Promise<{ local
     <main className="mx-auto w-full max-w-(--container-ax) px-gutter py-section-lg">
       <header className="flex flex-col gap-6">
         <div className="flex items-center gap-3">
-          {/* The single amber element on this page. Amber stays rare. */}
+          {/* The marker accent stays rare. */}
           <span
             aria-hidden="true"
-            className="size-1.5 shrink-0 rounded-full bg-ax-amber"
+            className="size-1.5 shrink-0 rounded-full bg-accent"
           />
-          <span className="ax-mono text-2xs text-ax-slate">{t("status")}</span>
+          <span className="text-xs text-text-mute">{t("status")}</span>
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="font-display text-2xl font-semibold tracking-tight text-ax-paper">
+          <p className="font-display text-2xl font-semibold tracking-tight text-text">
             {common("brand")}
           </p>
-          <p className="text-base text-ax-muted">{common("tagline")}</p>
         </div>
       </header>
 
-      <div className="mt-section-md flex flex-col gap-5 border-s-2 border-ax-cyan ps-6">
-        <h1 className="max-w-(--ax-measure-narrow) text-4xl text-ax-paper">{t("heading")}</h1>
-        <p className="max-w-(--ax-measure) text-lg leading-(--ax-leading-relaxed) text-ax-muted">
+      <div className="mt-section-md flex flex-col gap-5 border-s-2 border-link ps-6">
+        <h1 className="max-w-(--ax-measure-narrow) text-4xl text-text">{t("heading")}</h1>
+        <p className="max-w-(--ax-measure) text-lg leading-(--ax-leading-relaxed) text-text-mute">
           {t("intro")}
         </p>
       </div>
 
-      <section className="mt-section-md rounded-lg border border-ax-border bg-ax-surface">
+      <section className="mt-section-md rounded-lg border border-border bg-surface">
         <ul className="m-0 list-none p-0">
           {checks.map((check, index) => (
             <li
               key={check.label}
               className={[
                 "flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-5 py-4",
-                index > 0 ? "border-t border-ax-border" : "",
+                index > 0 ? "border-t border-border" : "",
               ].join(" ")}
             >
-              <span className="text-sm text-ax-muted">{check.label}</span>
+              <span className="text-sm text-text-2">{check.label}</span>
               <span
                 className={[
-                  "text-start text-sm text-ax-paper",
+                  "text-start text-sm text-text",
                   check.mono ? "ax-mono text-xs" : "",
                 ].join(" ")}
               >
@@ -80,8 +80,9 @@ export default async function ScaffoldPage({ params }: { params: Promise<{ local
         </ul>
       </section>
 
-      <footer className="mt-section-md border-t border-ax-border pt-8">
+      <footer className="mt-section-md flex flex-col gap-6 border-t border-border pt-8">
         <LocaleSwitcher />
+        <ThemeToggle />
       </footer>
     </main>
   );

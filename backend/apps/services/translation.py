@@ -13,6 +13,7 @@ from .models import FAQ, ProcessStep, Service, ServiceOffering
 
 @register(Service)
 class ServiceTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     fields = (
         "name",
         "hero_headline",
@@ -26,14 +27,17 @@ class ServiceTranslationOptions(TranslationOptions):
 
 @register(ServiceOffering)
 class ServiceOfferingTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     fields = ("title", "description")
 
 
 @register(ProcessStep)
 class ProcessStepTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     fields = ("title", "description")
 
 
 @register(FAQ)
 class FAQTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     fields = ("question", "answer")

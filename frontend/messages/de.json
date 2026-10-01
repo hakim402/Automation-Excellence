@@ -1,7 +1,6 @@
 {
   "common": {
     "brand": "Automex",
-    "tagline": "Systeme, die von selbst laufen",
     "requestQuote": "Angebot anfordern",
     "language": "Sprache",
     "skipToContent": "Zum Inhalt springen"
@@ -20,5 +19,11 @@
     "directionLtr": "Von links nach rechts",
     "directionRtl": "Von rechts nach links",
     "apiPending": "Wird in Phase 4 verbunden"
+  },
+  "theme": {
+    "label": "Design",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
   }
 }

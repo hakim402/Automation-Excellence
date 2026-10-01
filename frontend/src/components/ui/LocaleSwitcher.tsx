@@ -16,7 +16,7 @@ export async function LocaleSwitcher() {
 
   return (
     <nav aria-label={t("language")} className="flex flex-wrap items-center gap-x-1 gap-y-2">
-      <span className="me-3 text-xs text-ax-slate">{t("language")}</span>
+      <span className="me-3 text-xs text-text-mute">{t("language")}</span>
       {locales.map((locale) => {
         const isCurrent = locale === current;
         return (
@@ -29,8 +29,8 @@ export async function LocaleSwitcher() {
             className={[
               "rounded-sm px-2 py-1 text-sm no-underline transition-colors duration-(--ax-duration) ease-ax",
               isCurrent
-                ? "bg-ax-elevated text-ax-paper"
-                : "text-ax-slate hover:bg-ax-hover hover:text-ax-paper",
+                ? "bg-surface text-text"
+                : "text-text-mute hover:bg-surface hover:text-text",
             ].join(" ")}
           >
             {localeNames[locale]}

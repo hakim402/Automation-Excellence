@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import type { Metadata } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -28,16 +29,28 @@ export async function generateMetadata({
   }
 
   const t = await getTranslations({ locale, namespace: "common" });
+  const scaffold = await getTranslations({ locale, namespace: "scaffold" });
+  const url = `${SITE_URL}/${locale}`;
 
   return {
     metadataBase: new URL(SITE_URL),
     title: {
-      default: `${t("brand")} — ${t("tagline")}`,
+      default: t("brand"),
       template: `%s — ${t("brand")}`,
     },
-    // Full per-route metadata, hreflang alternates and JSON-LD land in
-    // Phase 7. This is the sitewide default only.
+    description: scaffold("intro"),
+    // Placeholder metadata. Real content pages provide their own in later phases.
+    alternates: {
+      canonical: url,
+      languages: {
+        ...Object.fromEntries(locales.map((code) => [localeTags[code], `${SITE_URL}/${code}`])),
+        "x-default": `${SITE_URL}/en`,
+      },
+    },
     openGraph: {
+      title: t("brand"),
+      description: scaffold("intro"),
+      url,
       siteName: t("brand"),
       locale: localeTags[locale as Locale],
       type: "website",
@@ -75,7 +88,9 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <ThemeProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

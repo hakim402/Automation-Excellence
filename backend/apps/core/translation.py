@@ -15,17 +15,20 @@ from .models import Industry, SiteSettings, Stat, TeamMember, Testimonial
 
 @register(SiteSettings)
 class SiteSettingsTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     fields = ("tagline", "about_short", "default_meta_title", "default_meta_description")
     # company_name is a proper noun. Addresses and phone numbers are data.
 
 
 @register(Industry)
 class IndustryTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     fields = ("name", "description")
 
 
 @register(Testimonial)
 class TestimonialTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     # The quote itself is translated so a Spanish visitor can read it; the
     # client's name and company are not.
     fields = ("client_role", "quote")
@@ -33,11 +36,13 @@ class TestimonialTranslationOptions(TranslationOptions):
 
 @register(TeamMember)
 class TeamMemberTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     fields = ("role", "bio")
 
 
 @register(Stat)
 class StatTranslationOptions(TranslationOptions):
+    required_languages = ("en",)
     # The label is prose. The value and the unit are numbers.
     fields = ("label",)
 

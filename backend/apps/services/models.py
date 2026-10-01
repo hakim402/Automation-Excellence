@@ -11,6 +11,8 @@ from django.db import models
 
 from apps.core.models import (
     Ordered,
+    Publishable,
+    PublishableQuerySet,
     RichTextSanitised,
     SEOFields,
     TimeStamped,
@@ -35,16 +37,25 @@ class ServiceKey(models.TextChoices):
     CYBER_SECURITY = "cyber-security", "Cyber Security"
 
 
-class Service(RichTextSanitised, TimeStamped, TranslationTracked, SEOFields, Ordered):
+class ServiceQuerySet(PublishableQuerySet):
+    def published(self):
+        return super().published().filter(is_active=True)
+
+
+class Service(RichTextSanitised, Publishable, SEOFields, Ordered):
     """
     One of the six service lines.
 
-    Visibility is governed by `is_active` rather than a draft/published
-    status: the six services are a fixed set that is either on the site or
-    temporarily off it, not a stream of content being drafted.
+    Publishing and translation review use the shared gate. is_active is an
+    additional switch for temporarily withdrawing a service.
     """
 
     rich_text_fields = ("body",)
+    objects = models.Manager.from_queryset(ServiceQuerySet)()
+
+    @property
+    def is_published(self) -> bool:
+        return self.is_active and super().is_published
 
     key = models.CharField(
         max_length=32,

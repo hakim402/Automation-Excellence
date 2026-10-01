@@ -1,7 +1,6 @@
 {
   "common": {
     "brand": "Automex",
-    "tagline": "Systems that run on their own",
     "requestQuote": "Request a quote",
     "language": "Language",
     "skipToContent": "Skip to content"
@@ -20,5 +19,11 @@
     "directionLtr": "Left to right",
     "directionRtl": "Right to left",
     "apiPending": "Connected in Phase 4"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   }
 }

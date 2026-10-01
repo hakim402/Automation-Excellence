@@ -105,7 +105,9 @@ class TranslationTracked(models.Model):
 class PublishableQuerySet(models.QuerySet):
     def published(self):
         """Only rows the public API may serve."""
-        return self.filter(status=PublishStatus.PUBLISHED)
+        return self.filter(status=PublishStatus.PUBLISHED).exclude(
+            translation_status=TranslationStatus.MACHINE
+        )
 
     def drafts(self):
         return self.filter(status=PublishStatus.DRAFT)
@@ -146,11 +148,16 @@ class Publishable(TimeStamped, TranslationTracked):
         # edit or unpublish does not rewrite history or move sitemap lastmod.
         if self.status == PublishStatus.PUBLISHED and self.published_at is None:
             self.published_at = timezone.now()
+            if kwargs.get("update_fields") is not None:
+                kwargs["update_fields"] = set(kwargs["update_fields"]) | {"published_at"}
         super().save(*args, **kwargs)
 
     @property
     def is_published(self) -> bool:
-        return self.status == PublishStatus.PUBLISHED
+        return (
+            self.status == PublishStatus.PUBLISHED
+            and self.translation_status != TranslationStatus.MACHINE
+        )
 
 
 class SEOFields(models.Model):
@@ -396,6 +403,9 @@ class TeamMember(TimeStamped, TranslationTracked, Ordered):
         default=True, help_text="Turn off when someone leaves, rather than deleting them."
     )
 
+    class Meta(Ordered.Meta):
+        pass
+
     def __str__(self) -> str:
         return self.name
 
@@ -420,6 +430,9 @@ class Stat(TimeStamped, TranslationTracked, Ordered):
         related_name="stats",
         help_text="Leave empty for a company-wide number shown on the home page.",
     )
+
+    class Meta(Ordered.Meta):
+        pass
 
     def __str__(self) -> str:
         return f"{self.value}{self.unit} {self.label}".strip()

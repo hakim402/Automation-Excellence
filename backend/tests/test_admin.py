@@ -148,6 +148,7 @@ class ListViewUsabilityTests(AdminSmokeTestCase):
             with self.subTest(model=model._meta.model_name):
                 self.assertTrue(model_admin.search_fields, "needs search_fields")
                 self.assertTrue(model_admin.list_display, "needs list_display")
+                self.assertTrue(model_admin.list_filter, "needs list_filter")
 
     def test_the_service_list_shows_how_complete_each_page_is(self):
         service = Service.objects.get(key="cyber-security")
@@ -189,9 +190,22 @@ class SidebarNavigationTests(TestCase):
         for group in NAVIGATION:
             for item in group["items"]:
                 with self.subTest(item=item["title"]):
-                    self.assertTrue(resolve(item["link"]), item["link"])
+                    self.assertTrue(resolve(item["link"].split("?", 1)[0]), item["link"])
 
     def test_groups_are_named_as_the_spec_describes(self):
         from config.admin_navigation import NAVIGATION
 
-        self.assertEqual([group["title"] for group in NAVIGATION], ["Site", "Services", "System"])
+        self.assertEqual(
+            [group["title"] for group in NAVIGATION],
+            [
+                "Site",
+                "Services",
+                "Digital Marketing",
+                "AI & Automation",
+                "Custom Software",
+                "Web Development",
+                "Mobile Development",
+                "Cyber Security",
+                "System",
+            ],
+        )

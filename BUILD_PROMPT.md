@@ -44,6 +44,7 @@ The existing site fails because visitors cannot find what they need. **Clarity i
 | Rendering | Static generation + ISR, with on-demand revalidation on publish |
 | Hosting | Single VPS, **no Docker for now**. Write `Dockerfile`s and `docker-compose.yml` but do not wire the workflow to them |
 | Locales | `en`, `es`, `fr`, `de`, `zh`, `ar` — public site. **Admin English only.** Full RTL |
+| Theming | **Light and dark modes, as equals.** Semantic tokens, `next-themes`, three-state toggle (light / dark / system). Brand palette is "Blueprint" — see `CLAUDE.md` §8 |
 | Translation | `django-modeltranslation` + Groq API admin action → machine draft → human review → publish |
 | CRM | Lead capture only. Form → Django admin list, tagged by service |
 | Pricing | Not shown. Everything is a quote request |
@@ -403,9 +404,11 @@ and locale attached.
 Both projects running, empty. Django with split settings (`base`/`dev`/`prod`), PostgreSQL connected,
 DRF + CORS + Unfold installed and themed, `apps/` package created. Next.js with TypeScript, Tailwind
 mapped to the tokens in `CLAUDE.md` §8, fonts loaded, `next-intl` routing live for six locales,
-`dir` switching working, `.env.example` on both sides. Prove it: `/en` and `/ar` render a styled
-placeholder with correct direction; `/admin` shows the Unfold theme.
-**→ CHECKPOINT. Show me the admin and both locales.**
+`dir` switching working, `.env.example` on both sides. Semantic light/dark tokens in place with
+`next-themes` and the three-state toggle, no flash of wrong theme on load.
+Prove it: `/en` and `/ar` render a styled placeholder with correct direction, in both modes;
+`/admin` shows the Unfold theme.
+**→ CHECKPOINT. Show me the admin, both locales, and both modes.**
 
 ### Phase 1 — Core backend and i18n
 `core` and `services` apps, abstracts, `django-modeltranslation` wired, Unfold admin with six language
@@ -432,7 +435,7 @@ Every endpoint above, English-fallback serializers, throttling, Turnstile verifi
 ### Phase 5 — Frontend shell
 Layout, header with services mega-menu, footer, language switcher, design tokens, UI primitives,
 `lib/api.ts`, RTL verified. No page content yet.
-**→ CHECKPOINT. Screenshots in `en` and `ar`.**
+**→ CHECKPOINT. Screenshots in `en` and `ar`, light and dark — four images.**
 
 ### Phase 6 — Pages
 Home, the six service pages from one shared template, `/work`, `/work/[slug]`, `/blog`,
@@ -452,6 +455,8 @@ Lighthouse pass, accessibility pass, all six locales checked.
   and how to ask for it.
 - Every public page returns complete, correct HTML with JavaScript disabled.
 - All six locales render, Arabic mirrors correctly, no font substitution.
+- Light and dark modes both pass: no unreadable text, no inverted screenshots, no flash of the wrong
+  theme on first paint, and contrast checked on every accent and link.
 - A non-developer can add a campaign, a case study, and a blog post, machine-translate them, review,
   and publish — without touching code.
 - A submitted quote request appears in the admin within seconds, tagged with service, locale, and page.

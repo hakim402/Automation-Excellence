@@ -1,7 +1,6 @@
 {
   "common": {
     "brand": "Automex",
-    "tagline": "أنظمة تعمل من تلقاء نفسها",
     "requestQuote": "اطلب عرض سعر",
     "language": "اللغة",
     "skipToContent": "تخطَّ إلى المحتوى"
@@ -20,5 +19,11 @@
     "directionLtr": "من اليسار إلى اليمين",
     "directionRtl": "من اليمين إلى اليسار",
     "apiPending": "سيتم الربط في المرحلة الرابعة"
+  },
+  "theme": {
+    "label": "المظهر",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام"
   }
 }

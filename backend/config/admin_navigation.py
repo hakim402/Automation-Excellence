@@ -6,9 +6,8 @@ deliberately does not duplicate a model per service (BUILD_PROMPT.md design
 note) -- the per-service reading of the admin comes from how this navigation
 is grouped, not from six copies of the same table.
 
-Groups are added as their models land. Phase 1 ships Site, Services and
-System; the six per-service groups arrive in Phase 2 with the models that
-make them non-empty (campaigns, agent types, case-study proxies, and so on).
+Phase 1 groups each service's existing shared content. Phase 2 will add
+its distinct models and case-study proxies to these same groups.
 
 Links are written as literal admin paths rather than reverse_lazy, because
 reverse_lazy on a model that does not exist yet fails at render time rather
@@ -51,4 +50,39 @@ SYSTEM_GROUP = {
     ],
 }
 
-NAVIGATION = [SITE_GROUP, SERVICES_GROUP, SYSTEM_GROUP]
+SERVICE_GROUPS = [
+    {
+        "title": title,
+        "separator": True,
+        "collapsible": True,
+        "items": [
+            {
+                "title": "Overview",
+                "icon": "widgets",
+                "link": f"/admin/services/service/?key__exact={key}",
+            },
+            *[
+                {
+                    "title": label,
+                    "icon": icon,
+                    "link": f"/admin/services/{model}/?service__key__exact={key}",
+                }
+                for model, label, icon in (
+                    ("serviceoffering", "Offerings", "view_agenda"),
+                    ("processstep", "Process steps", "list_alt"),
+                    ("faq", "FAQs", "help"),
+                )
+            ],
+        ],
+    }
+    for key, title in (
+        ("digital-marketing", "Digital Marketing"),
+        ("ai-automation", "AI & Automation"),
+        ("custom-software", "Custom Software"),
+        ("web-development", "Web Development"),
+        ("mobile-development", "Mobile Development"),
+        ("cyber-security", "Cyber Security"),
+    )
+]
+
+NAVIGATION = [SITE_GROUP, SERVICES_GROUP, *SERVICE_GROUPS, SYSTEM_GROUP]
