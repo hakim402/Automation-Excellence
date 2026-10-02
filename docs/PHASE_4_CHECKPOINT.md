@@ -50,6 +50,12 @@ frontend remains the earlier scaffold; layout, navigation and real pages belong 
 The original concurrency test initially left worker database connections open during test cleanup;
 its worker teardown was corrected and the complete suite subsequently passed cleanly.
 
+## Curl follow-up
+
+The [curl verification report](PHASE_4_CURL_CHECK.md) records real HTTP requests, successful inserts
+in a disposable test database, and the expected 503 responses with the current missing Turnstile
+key. No application defect was found in the tested POST flows.
+
 ## Demo behavior
 
 The command seeds one product with a feature; six placeholder case studies and metrics;

@@ -6,7 +6,7 @@ Read CLAUDE.md and BUILD_PROMPT.md before editing. Current reports:
 
 ## Current state
 
-- Full backend suite: 165 tests pass. Frontend build, Ruff, migration drift and production Django
+- Full backend suite: 171 tests pass (including six real curl HTTP tests). Frontend build, Ruff, migration drift and production Django
   deployment checks pass. The new CRM counter migration is applied locally.
 - seed_demo inserted 45 labeled development records; rerun inserted zero. Existing facts, service
   states and translations were preserved. Nothing was published. All six services remain drafts.
@@ -15,6 +15,13 @@ Read CLAUDE.md and BUILD_PROMPT.md before editing. Current reports:
   still unverified. Cloudflare dummy pass/fail/spent probes and mocked CRM email tests passed.
 - Phase 4 implementation is `358eb84`, local and not pushed. No dependencies added.
 - Never record real secrets in files, screenshots, logs or Git. Use existing local admin credentials.
+
+## Curl follow-up
+
+See docs/PHASE_4_CURL_CHECK.md. Real-config curl POSTs correctly return 503 while the Turnstile
+key is missing. Real HTTP fixture tests verified successful lead/newsletter persistence, duplicate
+handling and rejection/throttling paths in a disposable database. No production bypass was added,
+no real emails sent and no dummy CRM rows left in the development database.
 
 ## Phase 4 architecture
 
