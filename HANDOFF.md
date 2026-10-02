@@ -1,27 +1,24 @@
-# Handoff — Phase 5 checkpoint, October 2, 2026
+# Handoff — Phase 6 checkpoint, October 2, 2026
 
-**Phase 5 is implemented. Wait for user review and explicit approval before Phase 6.**
+**Phase 6 is implemented. Wait for user review and explicit approval before Phase 7.**
 Read CLAUDE.md and BUILD_PROMPT.md before editing.
-See [Phase 5 checkpoint](docs/PHASE_5_CHECKPOINT.md) for scope, tests, screenshots and review steps.
+See [Phase 6 checkpoint](docs/PHASE_6_CHECKPOINT.md) for implementation, tests and review steps.
 
 ## Current state
 
-- Shared localized frontend shell, responsive services/products menu, public API footer, theme and
-  route-preserving locale controls are implemented. Real pages remain Phase 6.
-- Frontend build, lint, typecheck, four API transport tests and HTTP checks across 72 shell URLs pass.
-  Backend suite: 171 tests pass. English/Arabic light/dark screenshots are in docs/screenshots/.
-- Development compiler output is `.next-dev`, separate from production `.next`. Do not merge them:
-  concurrent dev/build output previously caused missing-chunk 500 responses.
-- `lib/api.ts` and environment access are server-only. Public form transport is future Phase 6 work.
-  Shell API reads revalidate every 300 seconds. Publish-triggered invalidation is not implemented yet.
-- All navigation placeholders are noindex. Replace the `[page]` allowlisted routes with real pages in
-  Phase 6; unknown paths correctly 404. Service labels/descriptors in messages are navigation UI;
-  full service content still belongs to Django and its publish/review gates.
-- Real Turnstile keys are configured locally. Live browser verification followed by curl saved one
-  labeled test lead with HTTP 201; invalid token returned 400. Test alerts were disabled. Live SMTP
-  and newsletter confirmation delivery remain outstanding. Never include keys in Git or reports.
-- Existing content remains untouched. Draft public collections can legitimately be empty.
-- Stop at the Phase 5 checkpoint. No dependencies added or secrets committed.
+- Real SSR pages and capture form replace shell placeholders. Content comes from gated Django APIs.
+- Backend: 177 tests pass. Frontend: builds, lint/typecheck, eight unit tests and 90 populated URL checks.
+- Browser quote submission and stored attribution verified in a disposable database; no real lead
+  created. Test unpublish/republish confirmed 404/200 after live webhook calls.
+- ISR: shared public-content tag plus localized layout invalidation; Django after-commit signals,
+  safe failures, 300-second fallback, `revalidate_frontend` retry command. Bulk updates need explicit retry.
+- Local revalidation secrets synchronized in ignored files; restart both dev processes to load them.
+- Optional translated response_time added with core.0010, applied locally. Blank is intentional.
+- `.next-dev` is separate from `.next`. Final production build uses normal local API values.
+- Existing real draft content remains untouched. Fixtures, test servers and isolated database are
+  temporary. Screenshots are labeled TEST and do not assert business facts.
+- Phase 7: sitemap/robots routes, GA4, SEO refinements, Lighthouse and complete accessibility/media audit.
+- No new dependencies; no secrets committed. Do not start Phase 7 without user approval.
 
 ## Phase 4 architecture
 
@@ -48,7 +45,7 @@ services and does not rewrite existing records. Publishable demos stay drafts; t
 inactive. The category has no draft flag and is clearly labeled DEMO. Keep demo names/slugs stable
 for reruns. No media, certifications or CRM data were fabricated.
 
-JSON ETags revalidate on every API read. Frontend ISR/publish webhook is still Phase 6. Sitemap
+JSON ETags revalidate on every API read. Frontend ISR/publish webhook is implemented in Phase 6. Sitemap
 includes six locales and alternates; lastmod tracks page rows, not nested child edits.
 
 ## Existing translation implementation

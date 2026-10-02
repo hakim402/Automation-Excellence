@@ -171,3 +171,18 @@ were used only in an isolated probe. Its dummy success response returned `exampl
 action, so the probe supplied those expected values. Public endpoint actions remain strict and do
 not accept that dummy response as a real lead/newsletter verification. A production widget/domain
 integration still needs the real key and frontend form.
+
+## Phase 6 additions
+
+`GET /api/v1/home/?lang=<locale>` returns `case_studies` (featured, up to 3), `products`
+(featured, up to 6), `posts` (latest 3), `industries`, `tools`, `certifications` and
+`compliance_standards`. All page records use existing publication and review gates; industries/tools
+are limited to public services, and security credentials require a public cyber-security service.
+Existing summary serializers define item shapes. The endpoint is read-only and uses normal ETags.
+
+Public site settings now include optional translated `response_time` with English fallback.
+
+Next `POST /api/revalidate` is a separate frontend endpoint, authenticated with the shared secret
+in `Authorization: Bearer <secret>`. Only `{"scope":"content"}` is accepted (1 KiB body limit).
+Successful responses are `{"revalidated":true}`; errors return 400/401/413/503. No arbitrary tag
+or path input is accepted. See the Phase 6 checkpoint for after-commit hooks and retry semantics.

@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
   // Keep a running dev server from overwriting a production build.
   distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   poweredByHeader: false,
+  // Bound build-time API traffic for the single-VPS Django deployment.
+  experimental: { cpus: 2, staticGenerationMaxConcurrency: 2 },
 
   // Pin file tracing to this project. Without it Next walks up and finds an
   // unrelated package-lock.json outside the repo, and warns on every build.

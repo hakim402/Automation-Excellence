@@ -1,21 +1,30 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { ShellPlaceholder } from "@/components/layout/ShellPlaceholder";
-import { shellRoutes, isShellRoute } from "@/lib/navigation";
-import { shellMetadata } from "@/lib/metadata";
+import { getService, getServices, validSlug } from "@/lib/api";
+import { pageMetadata } from "@/lib/metadata";
+import { ServicePage } from "@/components/sections/ServicePage";
 import type { Locale } from "@/i18n/routing";
 export const revalidate = 300;
-export const dynamicParams = false;
-export function generateStaticParams() { return shellRoutes.map(page => ({ page })); }
+export const dynamicParams = true;
+export async function generateStaticParams() {
+  return (await getServices("en")).map((service) => ({ page: service.slug }));
+}
 type Props = { params: Promise<{ locale: Locale; page: string }> };
 export async function generateMetadata({ params }: Props) {
   const { locale, page } = await params;
-  if (!isShellRoute(page)) notFound();
-  return shellMetadata(locale, page);
+  if (!validSlug(page)) notFound();
+  const service = await getService(locale, page);
+  if (!service) notFound();
+  return pageMetadata(locale, `/${page}`, service.name, service.intro, service);
 }
-export default async function Placeholder({ params }: Props) {
+export default async function Page({ params }: Props) {
   const { locale, page } = await params;
-  if (!isShellRoute(page)) notFound();
   setRequestLocale(locale);
-  return <ShellPlaceholder route={page} />;
+  if (!validSlug(page)) notFound();
+  const [service, services] = await Promise.all([
+    getService(locale, page),
+    getServices(locale),
+  ]);
+  if (!service) notFound();
+  return <ServicePage service={service} services={services} locale={locale} />;
 }

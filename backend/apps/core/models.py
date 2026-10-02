@@ -229,6 +229,12 @@ class SiteSettings(TimeStamped, TranslationTracked):
     tagline = models.CharField(max_length=180, blank=True)
     about_short = models.TextField(blank=True, help_text="Two or three sentences. Plain text.")
 
+    response_time = models.CharField(
+        max_length=180,
+        blank=True,
+        help_text="Public response-time expectation. Leave blank until confirmed.",
+    )
+
     logo = models.ImageField(
         upload_to=UploadTo("brand"),
         validators=[validate_upload_size, validate_image_file],

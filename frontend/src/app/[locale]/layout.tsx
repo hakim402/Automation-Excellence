@@ -8,6 +8,8 @@ import { directionOf, localeTags, locales, routing } from "@/i18n/routing";
 import { fontsForLocale } from "@/styles/fonts";
 import { SITE_URL } from "@/lib/env";
 
+import { JsonLd } from "@/components/ui/JsonLd";
+import { organization } from "@/lib/metadata";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getSiteSettings, getServices } from "@/lib/api";
@@ -20,7 +22,10 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = { metadataBase: new URL(SITE_URL), title: { default: "Automex", template: "%s — Automex" } };
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: { default: "Automex", template: "%s — Automex" },
+};
 
 export default async function LocaleLayout({
   children,
@@ -38,7 +43,11 @@ export default async function LocaleLayout({
   // Required for static rendering of a localised route.
   setRequestLocale(locale);
 
-  const [site, services, common] = await Promise.all([getSiteSettings(locale), getServices(locale), getTranslations("common")]);
+  const [site, services, common] = await Promise.all([
+    getSiteSettings(locale),
+    getServices(locale),
+    getTranslations("common"),
+  ]);
   const dir = directionOf(locale);
   const { className, localeFontVar } = fontsForLocale(locale);
 
@@ -55,10 +64,15 @@ export default async function LocaleLayout({
       <body>
         <ThemeProvider>
           <NextIntlClientProvider>
-            <a href="#main-content" className="ax-skip-link">{common("skipToContent")}</a>
+            <a href="#main-content" className="ax-skip-link">
+              {common("skipToContent")}
+            </a>
             <Header site={site} services={services} />
-            <main id="main-content" tabIndex={-1} className="min-h-[24rem]">{children}</main>
+            <main id="main-content" tabIndex={-1} className="min-h-[24rem]">
+              {children}
+            </main>
             <Footer site={site} />
+            {site && <JsonLd data={organization(site)} />}
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

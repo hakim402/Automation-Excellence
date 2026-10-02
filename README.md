@@ -148,20 +148,22 @@ only so they never overwrite an admin's edits:
   pushes the language tabs further down. Collapse the set-once ones.
 - **Adding a translatable field means a migration** — it creates six columns, one per locale.
 
-## Phase 5 review checkpoint
+## Phase 6 review checkpoint
 
-The localized frontend shell is ready: responsive services/products navigation, footer, six-language
-switching, light/dark/system themes, RTL layout and a typed server-only API client. Page bodies remain
-clearly labeled placeholders until Phase 6. See [the checkpoint and screenshots](docs/PHASE_5_CHECKPOINT.md).
+Content pages, localized quote forms and publication-triggered cache invalidation are implemented.
+See [the Phase 6 checkpoint](docs/PHASE_6_CHECKPOINT.md) for verification, screenshots and review steps.
+The backend suite passes 177 tests. Frontend build, lint, typecheck, API/webhook unit tests and
+populated route checks pass. A browser quote request was verified in an isolated database.
 
-Run the backend on port 8000 and `npm run dev` in `frontend/`, then review `/en` and `/ar` on port 3000.
-Development and production use separate compiler directories (`.next-dev` and `.next`).
-Tests: `npm run test:api`; `npm run test:shell` requires a production preview on port 3001.
+Restart the backend on port 8000 and run `npm run dev` in `frontend/`; review `/en` and `/ar` on
+port 3000. Existing drafts stay private, so publish reviewed records in admin to see populated pages.
+Local webhook secrets are in ignored environment files; restart both processes after changes.
+Development and production compiler directories remain separate (`.next-dev` and `.next`).
 
-Real Turnstile verification and a curl lead insert succeeded locally. The full public form, publish
-webhook and content pages are Phase 6 work; live SMTP and newsletter confirmation remain outstanding.
-Phase 6 awaits your explicit approval.
+Tests: `npm run test:api`, `npm run test:phase6`; `npm run test:shell` expects a preview on port 3001.
+Full SEO/performance auditing, frontend sitemap/robots and analytics are Phase 7, awaiting approval.
+Live SMTP and newsletter confirmation delivery remain unverified.
 
 Earlier checkpoints: [Phase 1](docs/PHASE_1_CHECKPOINT.md), [Phase 2](docs/PHASE_2_CHECKPOINT.md),
-[Phase 3](docs/PHASE_3_CHECKPOINT.md), [Phase 4](docs/PHASE_4_CHECKPOINT.md).
-See [the API contract](docs/API_V1.md) for backend endpoints and capture requirements.
+[Phase 3](docs/PHASE_3_CHECKPOINT.md), [Phase 4](docs/PHASE_4_CHECKPOINT.md),
+[Phase 5](docs/PHASE_5_CHECKPOINT.md). See [the API contract](docs/API_V1.md).

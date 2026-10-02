@@ -71,6 +71,7 @@ class SiteSettingsSerializer(PublicSerializer):
             "company_name",
             "tagline",
             "about_short",
+            "response_time",
             "logo",
             "logo_dark",
             "favicon",

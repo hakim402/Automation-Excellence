@@ -16,7 +16,13 @@ from .models import Industry, SiteSettings, Stat, TeamMember, Testimonial, Video
 @register(SiteSettings)
 class SiteSettingsTranslationOptions(TranslationOptions):
     required_languages = ("en",)
-    fields = ("tagline", "about_short", "default_meta_title", "default_meta_description")
+    fields = (
+        "tagline",
+        "about_short",
+        "response_time",
+        "default_meta_title",
+        "default_meta_description",
+    )
     # company_name is a proper noun. Addresses and phone numbers are data.
 
 

@@ -38,6 +38,7 @@ class SiteSettingsAdmin(LanguageTabsMixin, TranslationStatusMixin, ModelAdmin):
     translated_field_order = (
         "tagline",
         "about_short",
+        "response_time",
         "default_meta_title",
         "default_meta_description",
     )

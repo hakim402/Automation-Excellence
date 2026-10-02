@@ -6,3 +6,6 @@ class CoreConfig(AppConfig):
     name = "apps.core"
     label = "core"
     verbose_name = "Site"
+
+    def ready(self):
+        from . import revalidation  # noqa: F401

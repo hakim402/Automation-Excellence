@@ -28,7 +28,7 @@ test('localized reads preserve the API base, pagination, cache tags and timeout'
     assert.equal(parsed.searchParams.get('service'), 'web-development');
     assert.equal(parsed.searchParams.has('category'), false);
     assert.equal(options.next.revalidate, 300);
-    assert.deepEqual(options.next.tags, ['products']);
+    assert.deepEqual(options.next.tags, ['public-content', 'products']);
     assert.ok(options.signal instanceof AbortSignal);
     return Response.json({count: 13, next: null, previous: null, results: []});
   });

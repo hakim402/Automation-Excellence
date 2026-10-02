@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.routers import SimpleRouter
 
 from apps.blog.views import CategoryViewSet, PostViewSet
+from apps.core.home import HomeViewSet
 from apps.core.views import (
     SitemapViewSet,
     SiteSettingsViewSet,
@@ -24,6 +25,7 @@ router.register("portfolio/case-studies", CaseStudyViewSet, basename="case-study
 router.register("blog/posts", PostViewSet, basename="post")
 
 LIST_ENDPOINTS = {
+    "home": HomeViewSet,
     "site/settings": SiteSettingsViewSet,
     "videos": VideoViewSet,
     "blog/categories": CategoryViewSet,

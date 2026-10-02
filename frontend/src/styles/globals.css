@@ -180,3 +180,33 @@ a {
 }
 @media (max-width: 25rem) { .ax-primary { gap: var(--ax-4); justify-content: space-between; } }
 @media print { .ax-header, .ax-skip-link { display: none; } .ax-mega-panel { display: none; } }
+
+/* Content typography is confined to HTML sanitized by Django. */
+.prose { max-inline-size: var(--ax-measure); color: var(--text-2); overflow-wrap: anywhere; }
+.prose > * + * { margin-block-start: 1.25em; }
+.prose h2, .prose h3, .prose h4 { color: var(--text); margin-block-start: 2em; }
+.prose h2 { font-size: var(--ax-text-3xl); }
+.prose h3 { font-size: var(--ax-text-2xl); }
+.prose h4 { font-size: var(--ax-text-xl); }
+.prose ul, .prose ol { padding-inline-start: 1.5em; }
+.prose ul { list-style: disc; } .prose ol { list-style: decimal; }
+.prose li + li { margin-block-start: .5em; }
+.prose a { color: var(--link); text-decoration: underline; }
+.prose blockquote { border-inline-start: 2px solid var(--border); padding-inline-start: var(--ax-6); }
+.prose pre { overflow-x: auto; padding: var(--ax-5); background: var(--surface); }
+.prose code { font-family: var(--ax-font-mono); }
+.prose table { display: block; overflow-x: auto; border-collapse: collapse; }
+.prose th, .prose td { padding: var(--ax-3); border: 1px solid var(--border); text-align: start; }
+.prose img { max-inline-size: 100%; block-size: auto; }
+.ax-section { scroll-margin-block-start: 6rem; }
+.ax-detail-layout { display: grid; gap: var(--ax-8); }
+.ax-section-nav { position: sticky; inset-block-start: 0; z-index: 10; background: var(--bg); overflow-x: auto; padding-block: var(--ax-3); border-block: 1px solid var(--border); }
+.ax-section-nav a[aria-current="location"] { border-color: var(--accent); color: var(--text); }
+.ax-form label { color: var(--text-2); font-size: var(--ax-text-sm); }
+.ax-form input, .ax-form select, .ax-form textarea { display: block; inline-size: 100%; min-block-size: 2.75rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: var(--ax-radius-sm); padding: var(--ax-3); margin-block-start: var(--ax-2); }
+.ax-form [aria-invalid="true"] { border-color: var(--danger); }
+.ax-form textarea { resize: vertical; }
+.ax-readout-step { animation: ax-process 6s infinite; }
+@keyframes ax-process { 0%, 30% { border-color: var(--success); } 40%, 100% { border-color: var(--border); } }
+@media (min-width: 64rem) { .ax-detail-layout { grid-template-columns: var(--ax-rail) minmax(0,1fr); } .ax-section-nav { align-self: start; max-block-size: 90vh; border: 0; inset-block-start: var(--ax-6); } }
+@media (prefers-reduced-motion: reduce) { .ax-readout-step { animation: none; } }
