@@ -5,25 +5,51 @@
     "language": "Language",
     "skipToContent": "Skip to content"
   },
-  "scaffold": {
-    "status": "Scaffold",
-    "heading": "The build is standing up",
-    "intro": "Phase 0 is in place: the API, the six locales, the design tokens and the admin theme. Page content arrives in the phases that follow.",
-    "checks": {
-      "locales": "Six locales routed",
-      "direction": "Text direction",
-      "tokens": "Design tokens loaded",
-      "fonts": "Font stack for this locale",
-      "api": "Content API"
-    },
-    "directionLtr": "Left to right",
-    "directionRtl": "Right to left",
-    "apiPending": "Connected in Phase 4"
-  },
   "theme": {
     "label": "Theme",
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "digital-marketing": "Digital Marketing",
+    "ai-automation": "AI & Automation",
+    "custom-software": "Custom Software",
+    "web-development": "Web App Development",
+    "mobile-development": "Mobile App Development",
+    "cyber-security": "Cyber Security",
+    "about": "About",
+    "contact": "Contact",
+    "products": "Products",
+    "work": "Our work",
+    "blog": "Blog",
+    "explore": "Explore services & products",
+    "browseProducts": "Browse products",
+    "productsDescription": "Ready-to-use software and tools.",
+    "primary": "Main navigation",
+    "descriptions": {
+      "digital-marketing": "Campaigns, content and search",
+      "ai-automation": "Agents, integrations and workflows",
+      "custom-software": "Business systems and databases",
+      "web-development": "Websites, portals and platforms",
+      "mobile-development": "iOS, Android and cross-platform",
+      "cyber-security": "Testing, audits and protection"
+    }
+  },
+  "footer": {
+    "company": "Company",
+    "contact": "Contact us",
+    "us": "US",
+    "af": "Afghanistan",
+    "rights": "All rights reserved.",
+    "services": "Services"
+  },
+  "shell": {
+    "preview": "Website preview",
+    "description": "This page is being prepared. Explore our services and company information using the navigation.",
+    "backHome": "Back to home",
+    "notFound": "Page not found"
   }
 }

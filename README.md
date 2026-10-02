@@ -148,16 +148,20 @@ only so they never overwrite an admin's edits:
   pushes the language tabs further down. Collapse the set-once ones.
 - **Adding a translatable field means a migration** — it creates six columns, one per locale.
 
-## Phase 4 review checkpoint
+## Phase 5 review checkpoint
 
-The localized content API, complete service payloads, protected CRM capture and repeatable demo
-seeding are implemented. See [the checkpoint](docs/PHASE_4_CHECKPOINT.md) for verification and
-review instructions, and [the API contract](docs/API_V1.md) for endpoint and form details.
-Phase 5 awaits your explicit approval.
+The localized frontend shell is ready: responsive services/products navigation, footer, six-language
+switching, light/dark/system themes, RTL layout and a typed server-only API client. Page bodies remain
+clearly labeled placeholders until Phase 6. See [the checkpoint and screenshots](docs/PHASE_5_CHECKPOINT.md).
 
-The real Turnstile key must be configured before form submissions can succeed. Newsletter
-confirmation delivery and live SMTP verification remain outstanding. The public frontend is still
-the localized Blueprint scaffold; layout and pages follow in Phases 5–6.
+Run the backend on port 8000 and `npm run dev` in `frontend/`, then review `/en` and `/ar` on port 3000.
+Development and production use separate compiler directories (`.next-dev` and `.next`).
+Tests: `npm run test:api`; `npm run test:shell` requires a production preview on port 3001.
+
+Real Turnstile verification and a curl lead insert succeeded locally. The full public form, publish
+webhook and content pages are Phase 6 work; live SMTP and newsletter confirmation remain outstanding.
+Phase 6 awaits your explicit approval.
 
 Earlier checkpoints: [Phase 1](docs/PHASE_1_CHECKPOINT.md), [Phase 2](docs/PHASE_2_CHECKPOINT.md),
-[Phase 3](docs/PHASE_3_CHECKPOINT.md).
+[Phase 3](docs/PHASE_3_CHECKPOINT.md), [Phase 4](docs/PHASE_4_CHECKPOINT.md).
+See [the API contract](docs/API_V1.md) for backend endpoints and capture requirements.

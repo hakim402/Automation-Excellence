@@ -1,3 +1,5 @@
+import "server-only";
+
 /**
  * Environment access, validated once at module load.
  *

@@ -1,13 +1,7 @@
-/**
- * The only place the frontend talks to Django.
- *
- * No component file may fetch the backend directly (CLAUDE.md section 6).
- * Everything here runs on the server — during the static build or an ISR
- * revalidation — so page content is in the HTML before any JavaScript runs.
- *
- * Endpoint wrappers are added in Phase 4/5 once the API exists. This module
- * currently provides the transport those wrappers will share.
- */
+/** Server-only content transport. Browser form writes are a separate Phase 6 boundary. */
+import "server-only";
+import { cache } from "react";
+import type { Paginated, ProductSummary, ServiceSummary, SiteSettings } from "./api-types";
 
 import { API_URL } from "./env";
 import type { Locale } from "@/i18n/routing";
@@ -34,9 +28,12 @@ type FetchOptions = {
   tags?: string[];
 };
 
-const DEFAULT_REVALIDATE = 3600;
+const DEFAULT_REVALIDATE = 300;
 
 function buildUrl(path: string, { locale, query }: FetchOptions): string {
+  if (!/^\/[a-z0-9][a-z0-9/_-]*\/$/.test(path)) {
+    throw new Error("API paths must be relative endpoint paths with a trailing slash.");
+  }
   const url = new URL(`${API_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`);
 
   if (locale) {
@@ -61,6 +58,7 @@ export async function apiGet<T>(path: string, options: FetchOptions = {}): Promi
 
   const response = await fetch(url, {
     headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(10_000),
     next: {
       revalidate: options.revalidate ?? DEFAULT_REVALIDATE,
       tags: options.tags,
@@ -90,4 +88,15 @@ export async function apiGetOptional<T>(
     }
     throw error;
   }
+}
+
+// React deduplicates layout/metadata reads within the same server render.
+export const getSiteSettings = cache((locale: Locale) =>
+  apiGetOptional<SiteSettings>("/site/settings/", { locale, tags: ["site-settings"] }),
+);
+export const getServices = cache((locale: Locale) =>
+  apiGet<ServiceSummary[]>("/services/", { locale, tags: ["services"] }),
+);
+export function getProducts(locale: Locale, query: { category?: string; service?: string; page?: number } = {}) {
+  return apiGet<Paginated<ProductSummary>>("/products/", { locale, query, tags: ["products"] });
 }

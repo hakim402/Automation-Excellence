@@ -1,42 +1,24 @@
-import { getLocale, getTranslations } from "next-intl/server";
+"use client";
+import { useLocale, useTranslations } from "next-intl";
+import { useTransition } from "react";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { localeNames, locales, type Locale } from "@/i18n/routing";
 
-import { Link } from "@/i18n/navigation";
-import { localeNames, locales } from "@/i18n/routing";
-
-/**
- * Locale switcher. A server component — six links need no JavaScript, and
- * rendering them server-side means crawlers follow them.
- *
- * Each label is written in its own language, which is how a visitor finds
- * their language without reading English first.
- */
-export async function LocaleSwitcher() {
-  const current = await getLocale();
-  const t = await getTranslations("common");
-
+export function LocaleSwitcher() {
+  const current = useLocale();
+  const t = useTranslations("common");
+  const pathname = usePathname();
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
   return (
-    <nav aria-label={t("language")} className="flex flex-wrap items-center gap-x-1 gap-y-2">
-      <span className="me-3 text-xs text-text-mute">{t("language")}</span>
-      {locales.map((locale) => {
-        const isCurrent = locale === current;
-        return (
-          <Link
-            key={locale}
-            href="/"
-            locale={locale}
-            hrefLang={locale}
-            aria-current={isCurrent ? "true" : undefined}
-            className={[
-              "rounded-sm px-2 py-1 text-sm no-underline transition-colors duration-(--ax-duration) ease-ax",
-              isCurrent
-                ? "bg-surface text-text"
-                : "text-text-mute hover:bg-surface hover:text-text",
-            ].join(" ")}
-          >
-            {localeNames[locale]}
-          </Link>
-        );
-      })}
-    </nav>
+    <label className="flex items-center gap-2 text-sm text-text-2">
+      <span className="sr-only">{t("language")}</span>
+      <select value={current} disabled={pending} className="min-h-11 max-w-36 rounded-sm border border-border bg-surface px-3 text-text" onChange={(event) => {
+        const locale = event.target.value as Locale;
+        startTransition(() => router.replace(`${pathname}${window.location.search}${window.location.hash}`, { locale, scroll: false }));
+      }}>
+        {locales.map((locale) => <option key={locale} value={locale} lang={locale}>{localeNames[locale]}</option>)}
+      </select>
+    </label>
   );
 }

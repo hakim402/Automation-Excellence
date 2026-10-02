@@ -5,25 +5,51 @@
     "language": "Idioma",
     "skipToContent": "Saltar al contenido"
   },
-  "scaffold": {
-    "status": "Estructura",
-    "heading": "La construcción está en marcha",
-    "intro": "La fase 0 está lista: la API, los seis idiomas, los tokens de diseño y el tema del panel de administración. El contenido de las páginas llega en las fases siguientes.",
-    "checks": {
-      "locales": "Seis idiomas enrutados",
-      "direction": "Dirección del texto",
-      "tokens": "Tokens de diseño cargados",
-      "fonts": "Tipografías de este idioma",
-      "api": "API de contenido"
-    },
-    "directionLtr": "De izquierda a derecha",
-    "directionRtl": "De derecha a izquierda",
-    "apiPending": "Se conecta en la fase 4"
-  },
   "theme": {
     "label": "Tema",
     "light": "Claro",
     "dark": "Oscuro",
     "system": "Sistema"
+  },
+  "nav": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "digital-marketing": "Marketing digital",
+    "ai-automation": "IA y automatización",
+    "custom-software": "Software a medida",
+    "web-development": "Desarrollo web",
+    "mobile-development": "Aplicaciones móviles",
+    "cyber-security": "Ciberseguridad",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "products": "Productos",
+    "work": "Proyectos",
+    "blog": "Blog",
+    "explore": "Explorar servicios y productos",
+    "browseProducts": "Ver productos",
+    "productsDescription": "Software y herramientas listos para usar.",
+    "primary": "Navegación principal",
+    "descriptions": {
+      "digital-marketing": "Campañas, contenido y buscadores",
+      "ai-automation": "Agentes, integraciones y flujos de trabajo",
+      "custom-software": "Sistemas empresariales y bases de datos",
+      "web-development": "Sitios web, portales y plataformas",
+      "mobile-development": "iOS, Android y multiplataforma",
+      "cyber-security": "Pruebas, auditorías y protección"
+    }
+  },
+  "footer": {
+    "company": "Empresa",
+    "contact": "Contáctanos",
+    "us": "EE. UU.",
+    "af": "Afganistán",
+    "rights": "Todos los derechos reservados.",
+    "services": "Servicios"
+  },
+  "shell": {
+    "preview": "Vista previa del sitio",
+    "description": "Esta página está en preparación. Explora nuestros servicios y la información de la empresa en el menú.",
+    "backHome": "Volver al inicio",
+    "notFound": "Página no encontrada"
   }
 }

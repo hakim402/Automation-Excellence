@@ -1,27 +1,27 @@
-# Handoff — Phase 4 checkpoint, October 2, 2026
+# Handoff — Phase 5 checkpoint, October 2, 2026
 
-**Phase 4 is implemented. Wait for user review and explicit approval before Phase 5.**
-Read CLAUDE.md and BUILD_PROMPT.md before editing. Current reports:
-[checkpoint](docs/PHASE_4_CHECKPOINT.md), [API contract](docs/API_V1.md).
+**Phase 5 is implemented. Wait for user review and explicit approval before Phase 6.**
+Read CLAUDE.md and BUILD_PROMPT.md before editing.
+See [Phase 5 checkpoint](docs/PHASE_5_CHECKPOINT.md) for scope, tests, screenshots and review steps.
 
 ## Current state
 
-- Full backend suite: 171 tests pass (including six real curl HTTP tests). Frontend build, Ruff, migration drift and production Django
-  deployment checks pass. The new CRM counter migration is applied locally.
-- seed_demo inserted 45 labeled development records; rerun inserted zero. Existing facts, service
-  states and translations were preserved. Nothing was published. All six services remain drafts.
-- API routes are live under /api/v1/. Empty public lists/404 details are expected for draft content.
-- Real Turnstile secret is unset; CRM POST fails closed with 503 until configured. Live SMTP is
-  still unverified. Cloudflare dummy pass/fail/spent probes and mocked CRM email tests passed.
-- Phase 4 implementation is `358eb84`, local and not pushed. No dependencies added.
-- Never record real secrets in files, screenshots, logs or Git. Use existing local admin credentials.
-
-## Curl follow-up
-
-See docs/PHASE_4_CURL_CHECK.md. Real-config curl POSTs correctly return 503 while the Turnstile
-key is missing. Real HTTP fixture tests verified successful lead/newsletter persistence, duplicate
-handling and rejection/throttling paths in a disposable database. No production bypass was added,
-no real emails sent and no dummy CRM rows left in the development database.
+- Shared localized frontend shell, responsive services/products menu, public API footer, theme and
+  route-preserving locale controls are implemented. Real pages remain Phase 6.
+- Frontend build, lint, typecheck, four API transport tests and HTTP checks across 72 shell URLs pass.
+  Backend suite: 171 tests pass. English/Arabic light/dark screenshots are in docs/screenshots/.
+- Development compiler output is `.next-dev`, separate from production `.next`. Do not merge them:
+  concurrent dev/build output previously caused missing-chunk 500 responses.
+- `lib/api.ts` and environment access are server-only. Public form transport is future Phase 6 work.
+  Shell API reads revalidate every 300 seconds. Publish-triggered invalidation is not implemented yet.
+- All navigation placeholders are noindex. Replace the `[page]` allowlisted routes with real pages in
+  Phase 6; unknown paths correctly 404. Service labels/descriptors in messages are navigation UI;
+  full service content still belongs to Django and its publish/review gates.
+- Real Turnstile keys are configured locally. Live browser verification followed by curl saved one
+  labeled test lead with HTTP 201; invalid token returned 400. Test alerts were disabled. Live SMTP
+  and newsletter confirmation delivery remain outstanding. Never include keys in Git or reports.
+- Existing content remains untouched. Draft public collections can legitimately be empty.
+- Stop at the Phase 5 checkpoint. No dependencies added or secrets committed.
 
 ## Phase 4 architecture
 
@@ -61,9 +61,8 @@ automatic code reload may inherit the old reloader parent's environment.
 
 ## Next phase, only after approval
 
-Phase 5: public shell, header/mega-menu, footer, locale switcher and primitives, plus API transport
-wrappers and four English/Arabic light/dark screenshots per BUILD_PROMPT.md. No page-content work
-before its assigned phase. The frontend src/lib/api.ts transport already exists.
+Phase 6: real homepage, service/product templates and content pages, forms, video components,
+ISR publish webhook. Follow the complete BUILD_PROMPT.md route list, including Products.
 
 ## Implementation constraints
 

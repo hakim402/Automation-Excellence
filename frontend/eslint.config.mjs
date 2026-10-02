@@ -23,7 +23,7 @@ const HEX_COLOUR = "/#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b/";
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts", "node_modules/**"],
+    ignores: [".next/**", ".next-dev/**", "out/**", "build/**", "next-env.d.ts", "node_modules/**"],
   },
   {
     files: ["src/**/*.{ts,tsx}"],

@@ -5,25 +5,51 @@
     "language": "Sprache",
     "skipToContent": "Zum Inhalt springen"
   },
-  "scaffold": {
-    "status": "Grundgerüst",
-    "heading": "Der Aufbau steht",
-    "intro": "Phase 0 ist fertig: die API, die sechs Sprachen, die Design-Tokens und das Admin-Theme. Die Seiteninhalte folgen in den nächsten Phasen.",
-    "checks": {
-      "locales": "Sechs Sprachen geroutet",
-      "direction": "Textrichtung",
-      "tokens": "Design-Tokens geladen",
-      "fonts": "Schriften für diese Sprache",
-      "api": "Inhalts-API"
-    },
-    "directionLtr": "Von links nach rechts",
-    "directionRtl": "Von rechts nach links",
-    "apiPending": "Wird in Phase 4 verbunden"
-  },
   "theme": {
     "label": "Design",
     "light": "Hell",
     "dark": "Dunkel",
     "system": "System"
+  },
+  "nav": {
+    "home": "Startseite",
+    "services": "Leistungen",
+    "digital-marketing": "Digitales Marketing",
+    "ai-automation": "KI & Automatisierung",
+    "custom-software": "Individualsoftware",
+    "web-development": "Webentwicklung",
+    "mobile-development": "Mobile Anwendungen",
+    "cyber-security": "Cybersicherheit",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "products": "Produkte",
+    "work": "Projekte",
+    "blog": "Blog",
+    "explore": "Leistungen und Produkte entdecken",
+    "browseProducts": "Produkte ansehen",
+    "productsDescription": "Einsatzbereite Software und Werkzeuge.",
+    "primary": "Hauptnavigation",
+    "descriptions": {
+      "digital-marketing": "Kampagnen, Inhalte und Suchmaschinen",
+      "ai-automation": "Agenten, Integrationen und Abläufe",
+      "custom-software": "Geschäftssysteme und Datenbanken",
+      "web-development": "Websites, Portale und Plattformen",
+      "mobile-development": "iOS, Android und plattformübergreifend",
+      "cyber-security": "Tests, Audits und Schutz"
+    }
+  },
+  "footer": {
+    "company": "Unternehmen",
+    "contact": "Kontakt aufnehmen",
+    "us": "USA",
+    "af": "Afghanistan",
+    "rights": "Alle Rechte vorbehalten.",
+    "services": "Leistungen"
+  },
+  "shell": {
+    "preview": "Website-Vorschau",
+    "description": "Diese Seite wird vorbereitet. Entdecken Sie unsere Leistungen und unser Unternehmen über die Navigation.",
+    "backHome": "Zur Startseite",
+    "notFound": "Seite nicht gefunden"
   }
 }

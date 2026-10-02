@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Automex
 .DS_Store
+
+# Separate local development compiler output
+/.next-dev/

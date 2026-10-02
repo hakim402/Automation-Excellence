@@ -20,7 +20,7 @@ export function ThemeToggle() {
         value={mounted ? theme ?? "system" : "system"}
         onChange={(event) => setTheme(event.target.value)}
         disabled={!mounted}
-        className="rounded-sm border border-border bg-surface px-3 py-2 text-text"
+        className="min-h-11 rounded-sm border border-border bg-surface px-3 py-2 text-text"
       >
         {(["light", "dark", "system"] as const).map((value) => (
           <option key={value} value={value}>{t(value)}</option>

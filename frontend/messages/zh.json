@@ -5,25 +5,51 @@
     "language": "语言",
     "skipToContent": "跳转到正文"
   },
-  "scaffold": {
-    "status": "基础框架",
-    "heading": "项目已搭建完成",
-    "intro": "第 0 阶段已就绪：接口、六种语言、设计变量与后台主题均已配置。页面内容将在后续阶段陆续加入。",
-    "checks": {
-      "locales": "六种语言路由",
-      "direction": "文字方向",
-      "tokens": "设计变量已加载",
-      "fonts": "该语言的字体",
-      "api": "内容接口"
-    },
-    "directionLtr": "从左到右",
-    "directionRtl": "从右到左",
-    "apiPending": "将在第 4 阶段接入"
-  },
   "theme": {
     "label": "主题",
     "light": "浅色",
     "dark": "深色",
     "system": "跟随系统"
+  },
+  "nav": {
+    "home": "首页",
+    "services": "服务",
+    "digital-marketing": "数字营销",
+    "ai-automation": "人工智能与自动化",
+    "custom-software": "定制软件",
+    "web-development": "Web 应用开发",
+    "mobile-development": "移动应用开发",
+    "cyber-security": "网络安全",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "products": "产品",
+    "work": "案例",
+    "blog": "博客",
+    "explore": "探索服务与产品",
+    "browseProducts": "浏览产品",
+    "productsDescription": "即用型软件与工具。",
+    "primary": "主导航",
+    "descriptions": {
+      "digital-marketing": "营销活动、内容与搜索优化",
+      "ai-automation": "智能体、集成与工作流",
+      "custom-software": "业务系统与数据库",
+      "web-development": "网站、门户与平台",
+      "mobile-development": "iOS、Android 与跨平台应用",
+      "cyber-security": "测试、审计与防护"
+    }
+  },
+  "footer": {
+    "company": "公司",
+    "contact": "联系我们",
+    "us": "美国",
+    "af": "阿富汗",
+    "rights": "保留所有权利。",
+    "services": "服务"
+  },
+  "shell": {
+    "preview": "网站预览",
+    "description": "此页面正在准备中。请通过导航了解我们的服务和公司信息。",
+    "backHome": "返回首页",
+    "notFound": "页面未找到"
   }
 }

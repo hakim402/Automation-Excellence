@@ -10,6 +10,8 @@ const mediaUrl = new URL(process.env.NEXT_PUBLIC_MEDIA_URL ?? "http://127.0.0.1:
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Keep a running dev server from overwriting a production build.
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   poweredByHeader: false,
 
   // Pin file tracing to this project. Without it Next walks up and finds an

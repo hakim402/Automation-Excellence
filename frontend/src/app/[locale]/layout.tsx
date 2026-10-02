@@ -4,10 +4,13 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { directionOf, localeTags, locales, routing, type Locale } from "@/i18n/routing";
+import { directionOf, localeTags, locales, routing } from "@/i18n/routing";
 import { fontsForLocale } from "@/styles/fonts";
 import { SITE_URL } from "@/lib/env";
 
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { getSiteSettings, getServices } from "@/lib/api";
 import "@/styles/globals.css";
 
 /**
@@ -17,46 +20,7 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
-
-  const t = await getTranslations({ locale, namespace: "common" });
-  const scaffold = await getTranslations({ locale, namespace: "scaffold" });
-  const url = `${SITE_URL}/${locale}`;
-
-  return {
-    metadataBase: new URL(SITE_URL),
-    title: {
-      default: t("brand"),
-      template: `%s — ${t("brand")}`,
-    },
-    description: scaffold("intro"),
-    // Placeholder metadata. Real content pages provide their own in later phases.
-    alternates: {
-      canonical: url,
-      languages: {
-        ...Object.fromEntries(locales.map((code) => [localeTags[code], `${SITE_URL}/${code}`])),
-        "x-default": `${SITE_URL}/en`,
-      },
-    },
-    openGraph: {
-      title: t("brand"),
-      description: scaffold("intro"),
-      url,
-      siteName: t("brand"),
-      locale: localeTags[locale as Locale],
-      type: "website",
-    },
-  };
-}
+export const metadata: Metadata = { metadataBase: new URL(SITE_URL), title: { default: "Automex", template: "%s — Automex" } };
 
 export default async function LocaleLayout({
   children,
@@ -74,6 +38,7 @@ export default async function LocaleLayout({
   // Required for static rendering of a localised route.
   setRequestLocale(locale);
 
+  const [site, services, common] = await Promise.all([getSiteSettings(locale), getServices(locale), getTranslations("common")]);
   const dir = directionOf(locale);
   const { className, localeFontVar } = fontsForLocale(locale);
 
@@ -89,7 +54,12 @@ export default async function LocaleLayout({
     >
       <body>
         <ThemeProvider>
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          <NextIntlClientProvider>
+            <a href="#main-content" className="ax-skip-link">{common("skipToContent")}</a>
+            <Header site={site} services={services} />
+            <main id="main-content" tabIndex={-1} className="min-h-[24rem]">{children}</main>
+            <Footer site={site} />
+          </NextIntlClientProvider>
         </ThemeProvider>
       </body>
     </html>

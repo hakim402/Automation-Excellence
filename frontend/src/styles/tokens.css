@@ -142,3 +142,9 @@
     --danger: #B3261E;
   }
 }
+
+/* Put the locale face before next/font's Latin fallback, which can contain Arabic glyphs. */
+html[lang="ar"], html[lang="zh-Hans"] {
+  --ax-font-display: var(--ax-font-locale), system-ui, sans-serif;
+  --ax-font-body: var(--ax-font-locale), system-ui, sans-serif;
+}

@@ -51,6 +51,7 @@
 
 /* -------------------------------------------------------------------- base */
 
+@layer base {
 *,
 *::before,
 *::after {
@@ -140,3 +141,42 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+}
+
+/* Phase 5 shell: disclosures remain native and usable without JavaScript. */
+.ax-header { position: relative; z-index: 20; }
+.ax-nav-link { color: var(--text-2); text-decoration: none; }
+.ax-nav-link:hover { color: var(--link); text-decoration: underline; }
+.ax-nav-link[aria-current="page"] { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: .45em; }
+.ax-primary > .ax-nav-link { display: flex; align-items: center; min-block-size: 3.5rem; font-size: var(--ax-text-sm); font-weight: 500; }
+.ax-wide-only, .ax-primary > .ax-wide-only { display: none; }
+.ax-disclosure summary { list-style: none; }
+.ax-disclosure summary::-webkit-details-marker { display: none; }
+.ax-disclosure[open] > summary svg { transform: rotate(180deg); }
+.ax-mega-panel { position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--surface); border-block-end: 2px solid var(--border); padding: var(--ax-8) var(--ax-gutter); max-block-size: 75vh; overflow-y: auto; box-shadow: 0 12px 20px -20px var(--text); }
+.ax-mega-grid { max-inline-size: calc(var(--ax-container) - 2 * var(--ax-gutter)); margin-inline: auto; display: grid; gap: var(--ax-8); }
+.ax-products-column { border-block-start: 1px solid var(--border); padding-block-start: var(--ax-6); }
+.ax-logo-dark { display: none; }
+[data-theme="dark"] .ax-logo-light { display: none; }
+[data-theme="dark"] .ax-logo-dark { display: block; }
+.ax-skip-link { position: fixed; inset-block-start: var(--ax-3); inset-inline-start: var(--ax-3); z-index: 100; padding: var(--ax-3) var(--ax-5); background: var(--surface); border: 2px solid var(--link); transform: translateY(-200%); }
+.ax-skip-link:focus { transform: translateY(0); }
+.ax-placeholder-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--ax-3); max-inline-size: 22rem; inline-size: 100%; block-size: 10rem; border: 1px solid var(--border); padding: var(--ax-3); }
+.ax-placeholder-grid span { border: 1px solid var(--border); }
+.ax-placeholder-grid span:first-child { grid-row: span 2; background: var(--surface); }
+.ax-placeholder-grid span:last-child { display: none; }
+@media (min-width: 48rem) {
+  .ax-mega-grid { grid-template-columns: 3fr 1fr; }
+  .ax-products-column { border-block-start: 0; border-inline-start: 1px solid var(--border); padding-block-start: 0; padding-inline-start: var(--ax-8); }
+}
+/* The full nine-item bar needs room even in the longer European translations. */
+@media (min-width: 110rem) {
+  .ax-wide-only { display: block; }
+  .ax-primary > .ax-wide-only { display: flex; }
+  .ax-compact-only { display: none; }
+  .ax-primary { justify-content: space-between; gap: var(--ax-3); }
+  .ax-primary > .ax-nav-link { font-size: var(--ax-text-xs); }
+}
+@media (max-width: 25rem) { .ax-primary { gap: var(--ax-4); justify-content: space-between; } }
+@media print { .ax-header, .ax-skip-link { display: none; } .ax-mega-panel { display: none; } }
