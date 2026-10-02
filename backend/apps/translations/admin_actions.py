@@ -8,6 +8,8 @@ from django.http import Http404, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import path, reverse
 
+from .client import CONFIGURATION_HELP
+
 
 class TranslationActionsMixin:
     change_form_template = "admin/translations/change_form.html"
@@ -86,6 +88,8 @@ class TranslationActionsMixin:
                 "rerun this action to retry missing fields.",
                 messages.WARNING if failed else messages.SUCCESS,
             )
+            if any(log.error_code == "configuration" for log in logs):
+                self.message_user(request, CONFIGURATION_HELP, messages.ERROR)
             if detail:
                 meta = self.model._meta
                 return HttpResponseRedirect(

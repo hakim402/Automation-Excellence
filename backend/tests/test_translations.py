@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
+from django.contrib.messages import get_messages
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import Client, RequestFactory, SimpleTestCase, TestCase, override_settings
@@ -321,6 +322,24 @@ class GroqClientTests(SimpleTestCase):
 
 
 class TranslationAdminTests(AdminSmokeTestCase):
+    @override_settings(GROQ_API_KEY="")
+    def test_configuration_failure_explains_restart_without_sending_content(self):
+        service = Service.objects.first()
+        url = reverse("admin:services_service_translate", args=[service.pk])
+        with (
+            patch("apps.translations.client.build_opener") as opener,
+            self.assertLogs("apps.translations.services", level="WARNING"),
+        ):
+            response = self.client.post(url, {"confirm_translation": "yes"})
+        opener.return_value.open.assert_not_called()
+        notices = [str(message) for message in get_messages(response.wsgi_request)]
+        self.assertTrue(any("0 saved, 5 failed" in message for message in notices))
+        self.assertEqual(sum("fully stop and restart Django" in msg for msg in notices), 1)
+        log = TranslationLog.objects.latest("pk")
+        self.assertEqual(log.attempts, 0)
+        detail = self.client.get(reverse("admin:translations_translationlog_change", args=[log.pk]))
+        self.assertContains(detail, "fully stop and restart Django")
+
     def test_bulk_requires_confirmation_and_records_actor(self):
         service = Service.objects.first()
         url = reverse("admin:services_service_changelist")

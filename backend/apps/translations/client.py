@@ -12,6 +12,13 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from django.conf import settings
 
+CONFIGURATION_HELP = (
+    "Translation could not start because the running server's Groq configuration is missing "
+    "or invalid. Check GROQ_API_KEY, GROQ_MODEL and GROQ_API_URL in the server environment. "
+    "After changing .env, fully stop and restart Django; refreshing the page or automatic "
+    "code reload may keep old environment values. No request was sent to Groq."
+)
+
 
 class TranslationError(Exception):
     """Only a fixed error code is safe to expose or log."""

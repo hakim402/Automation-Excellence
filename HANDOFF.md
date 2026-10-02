@@ -41,6 +41,15 @@ Phase 2 content/CRM architecture remains described in docs/PHASE_2_CHECKPOINT.md
 unverified. Public serializers must gate both parent and child machine translations in Phase 4.
 The public frontend remains the localized Blueprint scaffold; its transport is src/lib/api.ts.
 
+## Translation configuration follow-up
+
+The user encountered five `configuration` failures with zero attempts on a team-member record.
+The old development reloader parent retained the previous Groq environment. A fresh process
+worked; after explicit user approval, the team-member retry saved all five languages and stayed
+machine-translated. Fully stop/start the user's original runserver after `.env` edits; automatic
+code reload can inherit stale values. Admin errors now explain this directly. Thirty translation
+tests and the frontend build pass for the follow-up. No credentials were changed or exposed.
+
 ## Next phase, only after approval
 
 Phase 4: public API and seed data per BUILD_PROMPT.md. Do not start until the user approves the

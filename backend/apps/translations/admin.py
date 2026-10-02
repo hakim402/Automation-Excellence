@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from unfold.admin import ModelAdmin
 from unfold.decorators import display
 
+from .client import CONFIGURATION_HELP
 from .models import TranslationLog
 
 
@@ -43,9 +44,7 @@ class TranslationLogAdmin(ModelAdmin):
                 "An editor changed this record during translation. Their changes were preserved."
             ),
             "record_deleted": "The source record was deleted. No generated text was saved.",
-            "configuration": (
-                "Check the Groq key, model and HTTPS endpoint in the server environment."
-            ),
+            "configuration": CONFIGURATION_HELP,
             "http_401": "Check the Groq API key in the server environment.",
             "http_403": "Check Groq account and model access. No content was saved for this batch.",
             "http_404": "Check that the configured Groq model is still available.",

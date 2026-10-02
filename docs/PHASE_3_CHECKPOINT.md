@@ -111,6 +111,21 @@ python manage.py translate_content services.Service 2 --locale ar
 Changing English does not overwrite existing translations. An editor must clear a target field
 intentionally before requesting a new translation. Review status is per record, not per field.
 
+## Configuration troubleshooting
+
+If every locale fails with `configuration` and zero attempts, no provider request was made.
+Check the server environment and fully restart Django after editing `.env`: stop the original
+`runserver` with Ctrl+C, then start it again. A browser refresh is not enough. Django's reloader
+parent can pass its old environment into replacement child processes even after code changes.
+Do not make `.env` silently override deployment environment variables to work around this.
+
+The October 2 follow-up traced the reported five failures to an old running server configuration.
+A fresh process loaded the current model/key, and the user-approved team-member retry saved all
+five locales on the first attempt. Existing translations were preserved. The record remains
+machine-translated pending human review. The admin now explains configuration failures and the
+restart requirement directly; the same guidance appears in the audit log. Thirty translation
+regression tests and the frontend build passed for this follow-up.
+
 ## Evidence
 
 ![Translation audit log, light](screenshots/phase-3-translation-log-light.png)
