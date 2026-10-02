@@ -68,3 +68,14 @@ class NewsletterSubscriber(models.Model):
     def save(self, *args, **kwargs):
         self.email = self.email.strip().lower()
         super().save(*args, **kwargs)
+
+
+class CaptureThrottleBucket(models.Model):
+    """Ephemeral counters shared across workers; keys are HMACs, never raw IP addresses."""
+
+    key = models.CharField(max_length=40, unique=True)
+    count = models.PositiveIntegerField(default=0)
+    expires_at = models.DateTimeField(db_index=True)
+
+    def __str__(self):
+        return f"Capture counter expiring {self.expires_at.isoformat()}"

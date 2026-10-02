@@ -6,6 +6,7 @@ Nothing secret lives in this file — see .env.example for the full key list.
 """
 
 from pathlib import Path
+from urllib.parse import urlparse
 
 import environ
 from django.conf.locale import LANG_INFO
@@ -281,7 +282,11 @@ GROQ_MAX_COMPLETION_TOKENS = env.int("GROQ_MAX_COMPLETION_TOKENS", default=4096)
 TRANSLATION_ADMIN_MAX_RECORDS = env.int("TRANSLATION_ADMIN_MAX_RECORDS", default=3)
 
 TURNSTILE_SECRET_KEY = env("TURNSTILE_SECRET_KEY", default="")
-TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+TURNSTILE_TIMEOUT = env.float("TURNSTILE_TIMEOUT", default=10)
+TURNSTILE_ALLOWED_HOSTNAMES = env.list(
+    "TURNSTILE_ALLOWED_HOSTNAMES", default=[urlparse(FRONTEND_ORIGIN).hostname]
+)
+CAPTURE_TRUSTED_PROXIES = env.list("CAPTURE_TRUSTED_PROXIES", default=[])
 
 # Shared secret for the publish -> Next.js revalidation webhook.
 REVALIDATE_WEBHOOK_SECRET = env("REVALIDATE_WEBHOOK_SECRET", default="")
