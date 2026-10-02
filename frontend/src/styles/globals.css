@@ -206,7 +206,7 @@ a {
 .ax-form input, .ax-form select, .ax-form textarea { display: block; inline-size: 100%; min-block-size: 2.75rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: var(--ax-radius-sm); padding: var(--ax-3); margin-block-start: var(--ax-2); }
 .ax-form [aria-invalid="true"] { border-color: var(--danger); }
 .ax-form textarea { resize: vertical; }
-.ax-readout-step { animation: ax-process 6s infinite; }
-@keyframes ax-process { 0%, 30% { border-color: var(--success); } 40%, 100% { border-color: var(--border); } }
+.ax-status-dot { animation: ax-process 6s infinite; }
+@keyframes ax-process { 0%, 30% { transform: scale(1.25); } 40%, 100% { transform: scale(.75); } }
 @media (min-width: 64rem) { .ax-detail-layout { grid-template-columns: var(--ax-rail) minmax(0,1fr); } .ax-section-nav { align-self: start; max-block-size: 90vh; border: 0; inset-block-start: var(--ax-6); } }
-@media (prefers-reduced-motion: reduce) { .ax-readout-step { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .ax-status-dot { animation: none; } }

@@ -57,7 +57,11 @@ test("revalidation rejects wrong credentials and invalid scopes; fixed scope cle
   const result = await api.POST(request('{"scope":"content"}'));
   assert.equal(result.status, 200);
   assert.equal(result.headers.get("cache-control"), "no-store");
-  assert.deepEqual(calls, ["public-content", ["/[locale]", "layout"]]);
+  assert.deepEqual(calls, [
+    "public-content",
+    ["/sitemap.xml"],
+    ["/[locale]", "layout"],
+  ]);
 });
 test("revalidation fails closed for missing configuration", async () => {
   const api = load("app/api/revalidate/route.ts", {

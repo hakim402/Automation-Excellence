@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test:api": "node --test tests/api.test.mjs",
     "test:shell": "node --test tests/shell-http.test.mjs",
-    "test:phase6": "node --test tests/phase6.test.mjs"
+    "test:phase6": "node --test tests/phase6.test.mjs",
+    "test:seo": "node --test tests/seo.test.mjs",
+    "test:seo:http": "node --test tests/seo-http.test.mjs"
   },
   "dependencies": {
     "next": "^15.5.4",

@@ -38,6 +38,7 @@ export async function POST(request: Request) {
   if (!body || body.scope !== "content" || Object.keys(body).length !== 1)
     return reply({ error: "Invalid scope" }, 400);
   revalidateTag("public-content");
+  revalidatePath("/sitemap.xml");
   revalidatePath("/[locale]", "layout");
   return reply({ revalidated: true });
 }

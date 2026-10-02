@@ -109,7 +109,11 @@ export async function ListingPage({
           </button>
         </form>
         {result.items.length ? (
-          <ContentGrid items={result.items} prefix={`/${kind}`} />
+          <ContentGrid
+            headingLevel={2}
+            items={result.items}
+            prefix={`/${kind}`}
+          />
         ) : (
           <p className="border-t border-border py-10 text-text-mute">
             {t("empty")}

@@ -6,7 +6,9 @@ import type { NextConfig } from "next";
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 /** Backend media host, for next/image remotePatterns. */
-const mediaUrl = new URL(process.env.NEXT_PUBLIC_MEDIA_URL ?? "http://127.0.0.1:8000/media/");
+const mediaUrl = new URL(
+  process.env.NEXT_PUBLIC_MEDIA_URL ?? "http://127.0.0.1:8000/media/",
+);
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -35,6 +37,15 @@ const nextConfig: NextConfig = {
 
   async headers() {
     return [
+      {
+        source: "/fonts/:file*.woff2",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
       {
         source: "/:path*",
         headers: [

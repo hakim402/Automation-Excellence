@@ -98,7 +98,7 @@
   --border: #1C4578;
   --text: var(--brand-chalk);
   --text-2: #C5D8E8;
-  --text-mute: var(--brand-graphite);
+  --text-mute: color-mix(in srgb, var(--brand-graphite) 75%, var(--brand-chalk));
   --accent: var(--brand-marker);
   --on-accent: var(--brand-navy);
   --link: #7FB2E8;
@@ -115,7 +115,7 @@
   --border: #1C4578;
   --text: var(--brand-chalk);
   --text-2: #C5D8E8;
-  --text-mute: var(--brand-graphite);
+  --text-mute: color-mix(in srgb, var(--brand-graphite) 75%, var(--brand-chalk));
   --accent: var(--brand-marker);
   --on-accent: var(--brand-navy);
   --link: #7FB2E8;

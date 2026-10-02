@@ -21,10 +21,25 @@ export function Turnstile({
   onToken: (token: string) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const t = useTranslations("form");
   const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     if (!ready || !ref.current || !window.turnstile || !sitekey) return;
     const id = window.turnstile.render(ref.current, {
@@ -52,11 +67,13 @@ export function Turnstile({
   }, [ready, sitekey, locale, attempt, onToken]);
   return (
     <div>
-      <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-        onReady={() => setReady(true)}
-        onError={() => setFailed(true)}
-      />
+      {visible && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          onReady={() => setReady(true)}
+          onError={() => setFailed(true)}
+        />
+      )}
       <div ref={ref} className="min-h-20" />
       {(!sitekey || failed) && (
         <p role="status" className="text-sm text-danger">

@@ -19,7 +19,23 @@ export async function generateMetadata({ params }: Props) {
   if (!validSlug(slug)) notFound();
   const item = await getPost(locale, slug);
   if (!item) notFound();
-  return pageMetadata(locale, `/blog/${slug}`, item.title, item.excerpt, item);
+  const metadata = await pageMetadata(
+    locale,
+    `/blog/${slug}`,
+    item.title,
+    item.excerpt,
+    item,
+  );
+  return {
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      type: "article",
+      publishedTime: item.published_at || undefined,
+      modifiedTime: item.updated_at,
+      ...(item.author && { authors: [item.author.name] }),
+    },
+  };
 }
 export default async function Page({ params }: Props) {
   const { locale, slug } = await params;

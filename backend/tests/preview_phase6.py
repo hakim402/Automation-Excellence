@@ -3,6 +3,7 @@
 import os
 import signal
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -34,6 +35,8 @@ def main():
     from django.core.wsgi import get_wsgi_application
     from django.db import connection
 
+    media = tempfile.TemporaryDirectory(prefix="automex-preview-media-")
+    settings.MEDIA_ROOT = media.name
     settings.CORS_ALLOWED_ORIGINS = ["http://localhost:3001"]
     settings.LEAD_ALERT_RECIPIENTS = []
     settings.DATABASES["default"]["TEST"]["NAME"] = f"test_phase6_preview_{os.getpid()}"
@@ -41,12 +44,26 @@ def main():
     original = connection.settings_dict["NAME"]
     connection.creation.create_test_db(verbosity=0, autoclobber=False)
     try:
+        from io import BytesIO
+
+        from django.core.files.base import ContentFile
+        from PIL import Image, ImageDraw
+
         from apps.ai_automation.models import AgentType
         from apps.blog.models import Category, Post
         from apps.core.models import Industry, SiteSettings, TeamMember, Tool, Video
         from apps.portfolio.models import CaseStudy, CaseStudyMetric
         from apps.products.models import Product, ProductFeature
         from apps.services.models import FAQ, ProcessStep, Service, ServiceOffering
+
+        canvas = Image.new("RGB", (1200, 675), "#0B2545")
+        draw = ImageDraw.Draw(canvas)
+        for x in range(80, 1120, 180):
+            draw.rectangle((x, 220, x + 120, 420), outline="#EAF4FB", width=4)
+        draw.text((80, 80), "TEST MEDIA - DISPOSABLE PREVIEW", fill="#EAF4FB")
+        output = BytesIO()
+        canvas.save(output, "PNG")
+        fixture_image = output.getvalue()
 
         site = SiteSettings.load()
         site.tagline_en = "TEST PREVIEW — Systems for connected work"
@@ -70,6 +87,7 @@ def main():
             service.intro_ar = "معاينة اختبار — مقدمة واضحة للخدمة من واجهة المحتوى العامة."
             service.hero_headline_en = f"TEST PREVIEW — {service.name_en}"
             service.body_en = "<p>Test service overview.</p>"
+            service.hero_image.save("test-service.png", ContentFile(fixture_image), save=False)
             service.save()
             service.tools.add(tool)
             service.industries.add(industry)
@@ -112,6 +130,7 @@ def main():
             status="published",
             is_featured=True,
         )
+        product.cover_image.save("test-product.png", ContentFile(fixture_image))
         product.services.add(service)
         product.tech_stack.add(tool)
         ProductFeature.objects.create(
@@ -190,6 +209,7 @@ def main():
         pass
     finally:
         connection.creation.destroy_test_db(old_database_name=original, verbosity=0)
+        media.cleanup()
         print("Disposable fixture database removed.", flush=True)
 
 

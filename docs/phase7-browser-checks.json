@@ -1,0 +1,214 @@
+[
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "en",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "en",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "es",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "es",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "fr",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "fr",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "de",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "font": "Archivo, \"Archivo Fallback\", ui-sans-serif, system-ui, sans-serif",
+    "h1": 1,
+    "lang": "de",
+    "localeCss": [],
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "font": "\"Noto Sans SC\", \"Noto Sans SC Fallback\", system-ui, sans-serif",
+    "h1": 1,
+    "lang": "zh-Hans",
+    "localeCss": [
+      "/fonts/zh.css"
+    ],
+    "overflow": false,
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "font": "\"Noto Sans SC\", \"Noto Sans SC Fallback\", system-ui, sans-serif",
+    "h1": 1,
+    "lang": "zh-Hans",
+    "localeCss": [
+      "/fonts/zh.css"
+    ],
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "dir": "rtl",
+    "font": "\"IBM Plex Sans Arabic\", \"IBM Plex Sans Arabic Fallback\", system-ui, sans-serif",
+    "h1": 1,
+    "lang": "ar",
+    "localeCss": [
+      "/fonts/ar.css"
+    ],
+    "overflow": false,
+    "theme": "light"
+  },
+  {
+    "dir": "rtl",
+    "font": "\"IBM Plex Sans Arabic\", \"IBM Plex Sans Arabic Fallback\", system-ui, sans-serif",
+    "h1": 1,
+    "lang": "ar",
+    "localeCss": [
+      "/fonts/ar.css"
+    ],
+    "overflow": false,
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "en",
+    "overflow": false,
+    "page": "service",
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "en",
+    "overflow": false,
+    "page": "service",
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "es",
+    "overflow": false,
+    "page": "service",
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "es",
+    "overflow": false,
+    "page": "service",
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "fr",
+    "overflow": false,
+    "page": "service",
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "fr",
+    "overflow": false,
+    "page": "service",
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "de",
+    "overflow": false,
+    "page": "service",
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "de",
+    "overflow": false,
+    "page": "service",
+    "theme": "dark"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "zh-Hans",
+    "overflow": false,
+    "page": "service",
+    "theme": "light"
+  },
+  {
+    "dir": "ltr",
+    "heroLoaded": true,
+    "lang": "zh-Hans",
+    "overflow": false,
+    "page": "service",
+    "theme": "dark"
+  },
+  {
+    "dir": "rtl",
+    "heroLoaded": true,
+    "lang": "ar",
+    "overflow": false,
+    "page": "service",
+    "theme": "light"
+  },
+  {
+    "dir": "rtl",
+    "heroLoaded": true,
+    "lang": "ar",
+    "overflow": false,
+    "page": "service",
+    "theme": "dark"
+  }
+]

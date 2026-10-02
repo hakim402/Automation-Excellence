@@ -148,22 +148,23 @@ only so they never overwrite an admin's edits:
   pushes the language tabs further down. Collapse the set-once ones.
 - **Adding a translatable field means a migration** — it creates six columns, one per locale.
 
-## Phase 6 review checkpoint
+## Phase 7 review
 
-Content pages, localized quote forms and publication-triggered cache invalidation are implemented.
-See [the Phase 6 checkpoint](docs/PHASE_6_CHECKPOINT.md) for verification, screenshots and review steps.
-The backend suite passes 177 tests. Frontend build, lint, typecheck, API/webhook unit tests and
-populated route checks pass. A browser quote request was verified in an isolated database.
+SEO metadata, localized sitemap/robots, social previews, optional GA4 and Search Console
+verification are implemented. Arabic/Chinese fonts load only on their matching locale.
+See [the Phase 7 report](docs/PHASE_7_REPORT.md) for measured Lighthouse results,
+remaining acceptance gaps, screenshots, analytics setup and verification commands.
 
-Restart the backend on port 8000 and run `npm run dev` in `frontend/`; review `/en` and `/ar` on
-port 3000. Existing drafts stay private, so publish reviewed records in admin to see populated pages.
-Local webhook secrets are in ignored environment files; restart both processes after changes.
+Restart the backend on port 8000 and run `npm run dev` in `frontend/`; review `/en` and `/ar`
+on port 3000. Existing drafts stay private, so publish reviewed records in admin to see populated
+pages. The report screenshots use disposable test content, not real company claims.
 Development and production compiler directories remain separate (`.next-dev` and `.next`).
 
-Tests: `npm run test:api`, `npm run test:phase6`; `npm run test:shell` expects a preview on port 3001.
-Full SEO/performance auditing, frontend sitemap/robots and analytics are Phase 7, awaiting approval.
-Live SMTP and newsletter confirmation delivery remain unverified.
+Tests: `npm run test:api`, `npm run test:phase6`, `npm run test:seo`.
+`npm run test:shell` and `npm run test:seo:http` expect a preview on port 3001 (or `TEST_BASE_URL`).
+Use `PHASE6_FIXTURES=1` for the populated route checks against the isolated fixture server.
+GA4 stays disabled without a valid ID. Live SMTP and newsletter confirmation delivery remain unverified.
 
 Earlier checkpoints: [Phase 1](docs/PHASE_1_CHECKPOINT.md), [Phase 2](docs/PHASE_2_CHECKPOINT.md),
 [Phase 3](docs/PHASE_3_CHECKPOINT.md), [Phase 4](docs/PHASE_4_CHECKPOINT.md),
-[Phase 5](docs/PHASE_5_CHECKPOINT.md). See [the API contract](docs/API_V1.md).
+[Phase 5](docs/PHASE_5_CHECKPOINT.md), [Phase 6](docs/PHASE_6_CHECKPOINT.md). See [the API contract](docs/API_V1.md).

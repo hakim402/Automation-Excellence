@@ -17,6 +17,7 @@ export function MediaImage({
         fill
         sizes="(max-width: 768px) 100vw, 900px"
         priority={priority}
+        fetchPriority={priority ? "high" : undefined}
         className="object-cover"
       />
     </div>

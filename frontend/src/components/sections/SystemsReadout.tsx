@@ -9,10 +9,10 @@ export async function SystemsReadout() {
           <li
             key={key}
             className="ax-readout-step flex items-center gap-5 border-t border-border py-6"
-            style={{ animationDelay: `${index * 2}s` }}
           >
             <span
               aria-hidden="true"
+              style={{ animationDelay: `${index * 2}s` }}
               className="ax-status-dot size-2 bg-success"
             />
             <span className="text-xl">{t(`readout.${key}`)}</span>

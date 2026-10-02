@@ -1,22 +1,32 @@
 import "server-only";
 import type { Metadata } from "next";
+import { getSiteSettings } from "./api";
+import { openGraphLocales, alternateOpenGraphLocales } from "./seo";
 import { locales, localeTags, type Locale } from "@/i18n/routing";
 import { SITE_URL } from "./env";
 import type { SEO, SiteSettings } from "./api-types";
-export function pageMetadata(
+export async function pageMetadata(
   locale: Locale,
   path: string,
   title: string,
   description: string,
   seo?: Partial<SEO>,
-): Metadata {
+): Promise<Metadata> {
+  const site = await getSiteSettings(locale);
+  const image =
+    seo?.og_image || site?.default_og_image || `${SITE_URL}/og-default.png`;
+  const summary =
+    seo?.meta_description ||
+    description ||
+    site?.default_meta_description ||
+    title;
   const url = `${SITE_URL}/${locale}${path}`;
   const pageTitle = seo?.meta_title || title;
   return {
     title: {
       absolute: pageTitle === "Automex" ? pageTitle : `${pageTitle} — Automex`,
     },
-    description: seo?.meta_description || description,
+    description: summary,
     robots: { index: !seo?.noindex, follow: true },
     alternates: {
       canonical: url,
@@ -30,14 +40,22 @@ export function pageMetadata(
         "x-default": `${SITE_URL}/en${path}`,
       },
     },
+    twitter: {
+      card: "summary_large_image",
+      title: pageTitle,
+      description: summary,
+      images: [image],
+    },
+    icons: { icon: site?.favicon || `${SITE_URL}/favicon.png` },
     openGraph: {
       title: seo?.meta_title || title,
-      description: seo?.meta_description || description,
+      description: summary,
       url,
       siteName: "Automex",
-      locale: localeTags[locale],
+      locale: openGraphLocales[locale],
+      alternateLocale: alternateOpenGraphLocales(locale),
       type: "website",
-      ...(seo?.og_image && { images: [seo.og_image] }),
+      images: [{ url: image, alt: pageTitle }],
     },
   };
 }

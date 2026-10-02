@@ -6,7 +6,8 @@ import { notFound } from "next/navigation";
 
 import { directionOf, localeTags, locales, routing } from "@/i18n/routing";
 import { fontsForLocale } from "@/styles/fonts";
-import { SITE_URL } from "@/lib/env";
+import { Analytics } from "@/components/ui/Analytics";
+import { SITE_URL, GA4_MEASUREMENT_ID } from "@/lib/env";
 
 import { JsonLd } from "@/components/ui/JsonLd";
 import { organization } from "@/lib/metadata";
@@ -24,6 +25,8 @@ export function generateStaticParams() {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  icons: { icon: "/favicon.png" },
+  verification: { google: process.env.GOOGLE_SITE_VERIFICATION || undefined },
   title: { default: "Automex", template: "%s — Automex" },
 };
 
@@ -61,6 +64,11 @@ export default async function LocaleLayout({
       style={{ "--ax-font-locale": localeFontVar } as React.CSSProperties}
       suppressHydrationWarning
     >
+      <head>
+        {(locale === "ar" || locale === "zh") && (
+          <link rel="stylesheet" href={`/fonts/${locale}.css`} />
+        )}
+      </head>
       <body>
         <ThemeProvider>
           <NextIntlClientProvider>
@@ -72,6 +80,11 @@ export default async function LocaleLayout({
               {children}
             </main>
             <Footer site={site} />
+            <Analytics
+              measurementId={
+                GA4_MEASUREMENT_ID || site?.ga4_measurement_id || ""
+              }
+            />
             {site && <JsonLd data={organization(site)} />}
           </NextIntlClientProvider>
         </ThemeProvider>

@@ -1,24 +1,23 @@
-# Handoff — Phase 6 checkpoint, October 2, 2026
+# Handoff — Phase 7 review, October 2, 2026
 
-**Phase 6 is implemented. Wait for user review and explicit approval before Phase 7.**
 Read CLAUDE.md and BUILD_PROMPT.md before editing.
-See [Phase 6 checkpoint](docs/PHASE_6_CHECKPOINT.md) for implementation, tests and review steps.
+See [Phase 7 report](docs/PHASE_7_REPORT.md) for verified results and remaining acceptance gaps.
+Do not represent the 95+ mobile performance requirement as passed until measurements support it.
 
 ## Current state
 
-- Real SSR pages and capture form replace shell placeholders. Content comes from gated Django APIs.
-- Backend: 177 tests pass. Frontend: builds, lint/typecheck, eight unit tests and 90 populated URL checks.
-- Browser quote submission and stored attribution verified in a disposable database; no real lead
-  created. Test unpublish/republish confirmed 404/200 after live webhook calls.
-- ISR: shared public-content tag plus localized layout invalidation; Django after-commit signals,
-  safe failures, 300-second fallback, `revalidate_frontend` retry command. Bulk updates need explicit retry.
-- Local revalidation secrets synchronized in ignored files; restart both dev processes to load them.
-- Optional translated response_time added with core.0010, applied locally. Blank is intentional.
-- `.next-dev` is separate from `.next`. Final production build uses normal local API values.
-- Existing real draft content remains untouched. Fixtures, test servers and isolated database are
-  temporary. Screenshots are labeled TEST and do not assert business facts.
-- Phase 7: sitemap/robots routes, GA4, SEO refinements, Lighthouse and complete accessibility/media audit.
-- No new dependencies; no secrets committed. Do not start Phase 7 without user approval.
+- Phase 7 adds frontend sitemap/robots, complete social metadata defaults, optional analytics,
+  Search Console verification, conditional locale font CSS and loading/contrast improvements.
+- All six locales have SSR content, canonical/hreflang and structured data. Existing publish gates
+  remain enforced. Sitemap cache is invalidated by the authenticated publishing webhook.
+- User has no GA4 ID or Search Console verification value yet. Both remain disabled/unconfigured.
+- No new runtime dependencies or migrations. Font assets include their OFL licenses.
+- Backend suite: 177 tests. Frontend build/lint/typecheck, 11 unit tests and populated HTTP checks pass.
+- Real content stays untouched. Test media and database are disposable; screenshots carry TEST labels.
+- Phase 6 quote submission and attribution were verified in its isolated database. Phase 7 verifies
+  deferred Turnstile loading and form enablement, without submitting another lead.
+- Review before deployment. Live SMTP, GA4 receipt, Search Console ownership and production Lighthouse
+  have not been verified. See the report for running and configuration steps.
 
 ## Phase 4 architecture
 
@@ -55,11 +54,6 @@ rechecks source/targets under row locks. Machine text returns publishable record
 model/key are environment-only; audit logs omit content and raw provider responses. Current model
 is qwen/qwen3.8-27b (preview; recheck before launch). Restart Django fully after .env edits:
 automatic code reload may inherit the old reloader parent's environment.
-
-## Next phase, only after approval
-
-Phase 6: real homepage, service/product templates and content pages, forms, video components,
-ISR publish webhook. Follow the complete BUILD_PROMPT.md route list, including Products.
 
 ## Implementation constraints
 
@@ -133,17 +127,13 @@ These all cost real time to find. None are obvious from the code.
     `<=8.5.22`, which carries four advisories. Removing the override puts a
     high finding back into `npm audit` on a security vendor's own site.
 
-14. **The Arabic and Chinese fonts set `preload: false`** in
-    `src/styles/fonts.ts`. All six locales share one `/[locale]` route, so
-    preloading them made every visitor download both. Do not remove it.
+14. **Arabic and Chinese fonts use locale-specific public CSS.** Only `/ar` links `ar.css`,
+    and only `/zh` links `zh.css`. Keep the full Unicode coverage for future CMS content;
+    do not subset fonts to current UI strings. Hashed WOFF2 assets have immutable cache headers.
 
-15. **`Noto_Sans_SC` has no `chinese-simplified` subset in `next/font`** —
-    only `latin` / `latin-ext` / `vietnamese` / `cyrillic`. The Han unicode
-    ranges ship either way, so Chinese renders correctly, but ~200
-    `@font-face` rules (**~64 KB gzipped of CSS**) go to all six locales.
-    This is a known, measured Phase 7 item; the fix is self-hosting a subset
-    or a locale-conditional stylesheet, and it cannot be done inside
-    `next/font`.
+15. **Latin fonts remain in next/font.** Only the heading/body Latin subsets preload;
+    monospace and other script subsets load when needed. Do not reintroduce the large CJK
+    stylesheet into the shared Next font module.
 
 ---
 
@@ -158,8 +148,8 @@ These inputs are not supplied; leave their public content empty until confirmed.
    defaults to `False`, and `SiteSettings.public_phone_af` returns `""` until
    it is switched on. A test locks that default in.
 4. **Certifications and compliance standards Automex actually holds.**
-5. **Logo files** — a placeholder wordmark was never designed. `favicon.ico`
-   was removed rather than shipping Next.js's default.
+5. **Logo files** — the site uses a text wordmark; Phase 7 adds a matching fallback social
+   image and A favicon. Replace these with approved brand artwork when available.
 6. **Real case study content** — clients, metrics, screenshots.
 7. **Products in the top nav** — recommended left out; ten items is the
    findability problem the redesign exists to fix. Unconfirmed.
@@ -167,13 +157,5 @@ These inputs are not supplied; leave their public content empty until confirmed.
    is pinned and `postcss` is overridden by hand. Worth revisiting.
 9. **Video hosting** — YouTube is the assumed default.
 
-### One thing that needs flagging explicitly
-
-`frontend/messages/*.json` contains a `common.tagline` of **"Systems that run
-on their own"**, translated into all six locales. **I wrote that line. It is
-invented marketing copy**, added because the Phase 0 placeholder needed
-something to render. It is not a supplied business fact. Either get it
-approved, replace it, or drive it from `SiteSettings.tagline` (which is
-deliberately empty). Do not let it reach production unexamined.
-
----
+The old shell tagline was removed in Phase 6. Public marketing copy comes from reviewed
+CMS content; do not invent claims, client metrics, certifications or response promises.
