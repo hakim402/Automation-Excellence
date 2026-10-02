@@ -1,59 +1,62 @@
-# Handoff — Phase 3 checkpoint, October 2, 2026
+# Handoff — Phase 4 checkpoint, October 2, 2026
 
-**Phase 3 is implemented. Wait for translation-quality review and explicit approval before Phase 4.**
-Read `CLAUDE.md` and `BUILD_PROMPT.md` before editing. See
-[the checkpoint](docs/PHASE_3_CHECKPOINT.md) and [live samples](docs/PHASE_3_TRANSLATION_SAMPLES.md).
+**Phase 4 is implemented. Wait for user review and explicit approval before Phase 5.**
+Read CLAUDE.md and BUILD_PROMPT.md before editing. Current reports:
+[checkpoint](docs/PHASE_4_CHECKPOINT.md), [API contract](docs/API_V1.md).
 
 ## Current state
 
-- Phase 1 baseline `5c84df2` is on GitHub. Phase 2 implementation `882d55c` and its docs `e359b0a`
-  are committed locally. Phase 3 implementation is `dd517e2`; inline fix is `0b5e045`. These are local, not pushed.
-- 135 backend tests pass. Ruff, migration drift and production Django checks pass. Frontend build
-  passes; no frontend code changes in Phase 3. TranslationLog migration is applied locally.
-- Groq translations succeeded for AI & Automation and Cyber Security names in all five locales.
-  Both records are draft/machine. Rich HTML samples are in the report, not saved as website copy.
-- Use existing local credentials; never copy keys, passwords or raw provider errors into reports.
-- No dependencies were added. PostgreSQL is required. No Phase 4 APIs or seed_demo exist yet.
+- Full backend suite: 165 tests pass. Frontend build, Ruff, migration drift and production Django
+  deployment checks pass. The new CRM counter migration is applied locally.
+- seed_demo inserted 45 labeled development records; rerun inserted zero. Existing facts, service
+  states and translations were preserved. Nothing was published. All six services remain drafts.
+- API routes are live under /api/v1/. Empty public lists/404 details are expected for draft content.
+- Real Turnstile secret is unset; CRM POST fails closed with 503 until configured. Live SMTP is
+  still unverified. Cloudflare dummy pass/fail/spent probes and mocked CRM email tests passed.
+- Phase 4 implementation is `358eb84`, local and not pushed. No dependencies added.
+- Never record real secrets in files, screenshots, logs or Git. Use existing local admin credentials.
 
-## Implementation notes
+## Phase 4 architecture
 
-`apps.translations.services.GroqTranslator` batches saved English fields with blank targets,
-validates all output before each batch save, and checks concurrent edits under a row lock.
-`LanguageTabsMixin` supplies confirmation-based bulk/detail actions to translated models.
-Related children are translated separately. Machine text resets publishable records to draft.
-Audit logs contain only field names, IDs, locale, outcome, attempts and fixed error codes.
-Retry from the record action; completed fields are kept. The CLI supports explicit model/IDs/locales.
+core/api.py provides explicit localized fields, safe nested relations and public query helpers.
+core/public_queries.py defines shared owner gates and prefetch plans. Service page serialization
+lives in services/page.py to avoid circular imports with service summary serializers used by products,
+portfolio and blog. All public models have allowlisted serializers. No CRM read view exists.
 
-The Groq default changed to `qwen/qwen3.8-27b` because the previous model was retired. It is a
-preview model; recheck availability before production. The endpoint cannot redirect credentials.
-Requests use bounded retries and adaptive output budgets. Known protected names use opaque
-placeholders; HTML, URLs, numbers and length limits are validated after restoration.
+Publishable records use .published(); nonpublishable children use translation/active flags.
+Cases require public services, posts/testimonials respect optional service visibility, and videos
+check owners (including case-study service). Site settings return 404 while machine-translated;
+the private Afghanistan phone is never exposed unless its explicit flag is enabled.
 
-Admin operations are synchronous, limited to three records and 6,000 characters per batch by
-configurable defaults. Oversized individual fields fail safely; they are not silently truncated.
-There is no durable queue or global provider rate scheduler. Initial provider failures remain in
-local audit history, followed by successful translations and five safe no-op entries.
+crm/turnstile.py sends only token and optional client IP to Cloudflare and verifies exact hostname
+and action. The widget must set action lead/newsletter. No bypass is provided. Dummy Cloudflare
+responses returned example.com/no action, tested only in a separate process with those expectations.
 
-Browser verification found unscoped `x-show="open"` in collapsible translated inlines. The condition
-now applies only to nested inlines with matching Alpine state; top-level panels use native details.
+crm/throttling.py uses atomic PostgreSQL counters shared across workers. X-Real-IP is trusted only
+from configured direct proxy CIDRs; X-Forwarded-For is ignored. Counters use HMAC keys. Configure
+proxy rewriting and run prune_capture_throttles periodically during deployment.
 
-Phase 2 content/CRM architecture remains described in docs/PHASE_2_CHECKPOINT.md. Live SMTP is still
-unverified. Public serializers must gate both parent and child machine translations in Phase 4.
-The public frontend remains the localized Blueprint scaffold; its transport is src/lib/api.ts.
+seed_demo is DEBUG-only, idempotent via reserved demo identities, skips children of published
+services and does not rewrite existing records. Publishable demos stay drafts; the demo author is
+inactive. The category has no draft flag and is clearly labeled DEMO. Keep demo names/slugs stable
+for reruns. No media, certifications or CRM data were fabricated.
 
-## Translation configuration follow-up
+JSON ETags revalidate on every API read. Frontend ISR/publish webhook is still Phase 6. Sitemap
+includes six locales and alternates; lastmod tracks page rows, not nested child edits.
 
-The user encountered five `configuration` failures with zero attempts on a team-member record.
-The old development reloader parent retained the previous Groq environment. A fresh process
-worked; after explicit user approval, the team-member retry saved all five languages and stayed
-machine-translated. Fully stop/start the user's original runserver after `.env` edits; automatic
-code reload can inherit stale values. Admin errors now explain this directly. Thirty translation
-tests and the frontend build pass for the follow-up. No credentials were changed or exposed.
+## Existing translation implementation
+
+apps.translations fills missing fields from saved English, validates HTML/protected names, and
+rechecks source/targets under row locks. Machine text returns publishable records to draft. Groq
+model/key are environment-only; audit logs omit content and raw provider responses. Current model
+is qwen/qwen3.8-27b (preview; recheck before launch). Restart Django fully after .env edits:
+automatic code reload may inherit the old reloader parent's environment.
 
 ## Next phase, only after approval
 
-Phase 4: public API and seed data per BUILD_PROMPT.md. Do not start until the user approves the
-Phase 3 output quality. Preserve all earlier phase constraints and real-fact boundaries.
+Phase 5: public shell, header/mega-menu, footer, locale switcher and primitives, plus API transport
+wrappers and four English/Arabic light/dark screenshots per BUILD_PROMPT.md. No page-content work
+before its assigned phase. The frontend src/lib/api.ts transport already exists.
 
 ## Implementation constraints
 

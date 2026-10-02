@@ -148,16 +148,16 @@ only so they never overwrite an admin's edits:
   pushes the language tabs further down. Collapse the set-once ones.
 - **Adding a translatable field means a migration** — it creates six columns, one per locale.
 
-## Phase 3 review checkpoint
+## Phase 4 review checkpoint
 
-Phase 3 adds Groq translations from saved English into five languages, missing-field-only admin
-actions, bounded retries, strict HTML validation and an audit log. Generated text stays in draft
-until reviewed. See [the checkpoint](docs/PHASE_3_CHECKPOINT.md) for setup and manual review,
-and [live translation samples](docs/PHASE_3_TRANSLATION_SAMPLES.md) for all five languages.
-Phase 4 awaits your explicit approval.
+The localized content API, complete service payloads, protected CRM capture and repeatable demo
+seeding are implemented. See [the checkpoint](docs/PHASE_4_CHECKPOINT.md) for verification and
+review instructions, and [the API contract](docs/API_V1.md) for endpoint and form details.
+Phase 5 awaits your explicit approval.
 
-The public frontend remains the localized Blueprint scaffold. Content APIs arrive in Phase 4,
-and the public shell and pages in Phases 5–6. Live SMTP delivery still needs configured credentials
-and recipient verification; automated email behavior is covered by tests.
+The real Turnstile key must be configured before form submissions can succeed. Newsletter
+confirmation delivery and live SMTP verification remain outstanding. The public frontend is still
+the localized Blueprint scaffold; layout and pages follow in Phases 5–6.
 
-Earlier theme/admin work is recorded in [docs/PHASE_1_CHECKPOINT.md](docs/PHASE_1_CHECKPOINT.md).
+Earlier checkpoints: [Phase 1](docs/PHASE_1_CHECKPOINT.md), [Phase 2](docs/PHASE_2_CHECKPOINT.md),
+[Phase 3](docs/PHASE_3_CHECKPOINT.md).

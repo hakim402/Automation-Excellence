@@ -53,3 +53,11 @@ Captured with the in-app browser at its default viewport:
 - `phase-3-service-ar-dark.png`: actual saved Arabic service-name translation, RTL input.
 - `phase-3-translation-log-light.png`, `phase-3-translation-log-dark.png`: successful translations
   and safe no-op rerun entries. Initial failures are retained farther down the audit history.
+
+## Phase 4 review
+
+- `phase-4-api-root.png`: live discovery page with every implemented endpoint.
+- `phase-4-demo-product.png`: clearly labeled seeded product in Draft state.
+
+Captured in the in-app browser at its default viewport. Public service lists remain empty because
+existing services were not published by the seed command. No Phase 5 frontend change is shown.
